@@ -1,0 +1,9 @@
+{
+	"listenport" : 8000,
+	"checkReferer" : true,
+	"maxRecentPosts" : 10,
+	"postRestrictions" : {
+		"titleLength": 50,
+		"pasteLength" : 524288
+	}
+}

@@ -1,0 +1,36 @@
+{
+  "name": "PasteBin.JS",
+  "version": "0.0.0",
+  "description": "A pastebin implementation in node.js",
+  "main": "index.js",
+  "dependencies": {
+    "dateformat": "~1.0.6-1.2.3",
+    "express": "~3.4.1",
+    "express-dot": "~0.1.0",
+    "highlight.js": "~7.3.0",
+    "mongodb": "~1.3.19",
+    "mongoose": "~3.6.20",
+    "node-syntaxhighlighter": "~0.8.1",
+    "node-markdown": "~0.1.1",
+    "underscore": "~1.5.2",
+    "winston": "~0.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/podrezo/pastebinjs.git"
+  },
+  "keywords": [
+    "pastebin",
+    "node",
+    "nodejs",
+    "paste",
+    "bin"
+  ],
+  "author": "Petro Podrezo (petro@podrezo.com)",
+  "license": "BSD",
+  "readmeFilename": "README.md"
+}
