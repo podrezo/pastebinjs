@@ -125,6 +125,7 @@ app.get('/', function (req, res) {
 		recentPosts : recentPosts,
 		config: config,
 		deleted : typeof(req.query.deleted) !== 'undefined',
+        expired : typeof(req.query.expired) !== 'undefined',
 		menuActiveSubmit : true
 	});
 });
@@ -145,7 +146,7 @@ app.get('/p/:postid', function (req, res) {
 		// check if post is expired
 		if(typeof(post.expiry) !== 'undefined' && post.expiry != null && post.expiry.valueOf() < (new Date()).valueOf()) {
 			logger.info("attempted access of expired post "+req.param('postid'));
-			res.send(404,"expired post");
+            res.redirect("/?expired");
 			return;
 		}
 		// handling for special languages
@@ -193,7 +194,7 @@ app.get('/dl/:postid', function (req, res) {
 		// check if post is expired
 		if(typeof(post.expiry) !== 'undefined' && post.expiry != null && post.expiry.valueOf() < (new Date()).valueOf()) {
 			logger.info("attempted access of expired post "+req.param('postid'));
-			res.send(404,"expired post");
+			res.redirect("/?expired");
 			return;
 		}
 		res.setHeader("content-disposition","attachment; filename=" + (post.title == null ? post.language : post.title+"_"+post.language ) +".txt");
