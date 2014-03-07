@@ -35,3 +35,11 @@ The options are for the most part fairly self-explanatory but here's a brief exp
 Remember to run "npm install" to download all the dependencies before running the application.
 
 Simply run node and point it at **index.js** as the entry point - the database must be already running.
+
+# To-Do List
+
+There are a few features that I would like to add sometime in the future including:
+
+* Displaying line numbers when viewing a post
+* The ability to upload a post directly instead of pasting it (including drag and drop, ideally)
+* Periodically refreshing the 'recent posts' menu to purge expired posts from it
