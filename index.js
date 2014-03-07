@@ -114,6 +114,42 @@ db.Post.find({
 	logger.info("loaded " + posts.length + " recent posts");
 });
 
+function validatePostRequest(req,res,callback) {
+	db.Post.findOne({
+		_id : req.param('postid')
+	}, function (err, post) {
+		if (err) {
+			logger.warn("Error while getting post: " + err.toString());
+			res.send(500,"failed to retrieve post");
+			return;
+		}
+		if (post == null) {
+			res.render("index.html", {
+				languages: languages,
+				recentPosts : recentPosts,
+				config: config,
+				noSuchPost : true,
+				menuActiveSubmit : true
+			});
+			return;
+		}
+		// check if post is expired
+		if(typeof(post.expiry) !== 'undefined' && post.expiry != null && post.expiry.valueOf() < (new Date()).valueOf()) {
+			logger.info("attempted access of expired post "+req.param('postid'));
+			res.render("index.html", {
+				languages: languages,
+				recentPosts : recentPosts,
+				config: config,
+				expired : true,
+				menuActiveSubmit : true
+			});
+			return;
+		}
+		// successfully validated and authorized the request, proceed to callback
+		callback(post);
+	});
+}
+
 /*****************************
  * Express.JS Pages and URLs *
  *****************************/
@@ -125,30 +161,12 @@ app.get('/', function (req, res) {
 		recentPosts : recentPosts,
 		config: config,
 		deleted : typeof(req.query.deleted) !== 'undefined',
-        expired : typeof(req.query.expired) !== 'undefined',
 		menuActiveSubmit : true
 	});
 });
 /* View a post */
 app.get('/p/:postid', function (req, res) {
-	db.Post.findOne({
-		_id : req.param('postid')
-	}, function (err, post) {
-		if (err) {
-			logger.warn("Error while getting post: " + err.toString());
-			res.send(500,"failed to retrieve post");
-			return;
-		}
-		if (post == null) {
-			res.send(404,"no such post");
-			return;
-		}
-		// check if post is expired
-		if(typeof(post.expiry) !== 'undefined' && post.expiry != null && post.expiry.valueOf() < (new Date()).valueOf()) {
-			logger.info("attempted access of expired post "+req.param('postid'));
-            res.redirect("/?expired");
-			return;
-		}
+	validatePostRequest(req,res,function(post) {
 		// handling for special languages
 		if (post.language == "markdown") {
 			post.html = md(post.paste);
@@ -176,27 +194,11 @@ app.get('/p/:postid', function (req, res) {
 app.get('/dl/:postid', function (req, res) {
 	// check referrer, if required
 	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
-		res.send(403,"invalid referrer");
+		logger.warn("Blocked direct download via referral '"+req.headers.referer+"'");
+		res.redirect("/");
 		return;
 	}
-	db.Post.findOne({
-		_id : req.param('postid')
-	}, function (err, post) {
-		if (err) {
-			logger.warn("Error while getting post: " + err.toString());
-			res.send(500,"failed to retrieve post");
-			return;
-		}
-		if (post == null) {
-			res.send(404,"no such post");
-			return;
-		}
-		// check if post is expired
-		if(typeof(post.expiry) !== 'undefined' && post.expiry != null && post.expiry.valueOf() < (new Date()).valueOf()) {
-			logger.info("attempted access of expired post "+req.param('postid'));
-			res.redirect("/?expired");
-			return;
-		}
+	validatePostRequest(req,res,function(post) {
 		res.setHeader("content-disposition","attachment; filename=" + (post.title == null ? post.language : post.title+"_"+post.language ) +".txt");
 		res.setHeader("content-type","application/octet-stream");
 		res.send(post.paste);
@@ -206,7 +208,8 @@ app.get('/dl/:postid', function (req, res) {
 app.post('/', function (req, res) {
 	// check referrer, if required
 	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
-		res.send(403,"invalid referrer");
+		logger.warn("Blocked direct submit via referral '"+req.headers.referer+"'");
+		res.redirect("/");
 		return;
 	}
 
@@ -285,7 +288,13 @@ app.post('/delete/:postid', function (req, res) {
 				res.send(500,"failed to delete post");
 				return;
 			}
-			res.redirect("/?deleted=success");
+			res.render("index.html", {
+				languages: languages,
+				recentPosts : recentPosts,
+				config: config,
+				deleted : true,
+				menuActiveSubmit : true
+			});
 		});
 	});
 });

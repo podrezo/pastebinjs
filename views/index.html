@@ -2,13 +2,19 @@
     {{?it.expired}}
 	<div class="alert alert-warning" style="margin-top: 2em;">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<strong>Post Expired</strong> The post you are trying to access has expired and is no longer viewable.</code>
+		<strong>Sorry!</strong> The post you are trying to access has expired and is no longer viewable.</code>
 	</div>
 	{{?}}
 	{{?it.deleted}}
 	<div class="alert alert-success" style="margin-top: 2em;">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		<strong>Post Deleted</strong> The post was deleted successfully.</code>
+	</div>
+	{{?}}
+	{{?it.noSuchPost}}
+	<div class="alert alert-danger" style="margin-top: 2em;">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong>Sorry!</strong> The post you have requested does not exist.</code>
 	</div>
 	{{?}}
 	<div class="page-header">
