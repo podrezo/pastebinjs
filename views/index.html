@@ -17,6 +17,12 @@
 		<strong>Sorry!</strong> The post you have requested does not exist.</code>
 	</div>
 	{{?}}
+	{{?it.wrongDeletePassword}}
+	<div class="alert alert-danger" style="margin-top: 2em;">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong>Sorry!</strong> The delete password you entered is not correct for this post. Please try again.</code>
+	</div>
+	{{?}}
 	<div class="page-header">
 		<h1>New Paste <small>Copy &amp; paste your code/text below</small></h1>
 	</div>

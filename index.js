@@ -279,7 +279,13 @@ app.post('/delete/:postid', function (req, res) {
 			return;
 		}
 		if (post.deletepassword != req.body.deletepassword) {
-			res.send(403,"wrong password");
+			res.render("index.html", {
+				languages: languages,
+				recentPosts : recentPosts,
+				config: config,
+				wrongDeletePassword : true,
+				menuActiveSubmit : true
+			});
 			return;
 		}
 		db.Post.remove({_id : req.param('postid')},function(err) {
