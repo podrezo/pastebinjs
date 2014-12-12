@@ -1,5 +1,5 @@
 var crypto = require("crypto")
-  , config = require(__dirname+'/config.json');
+  , config = require('./config');
 
 // gets a random string
 exports.get_unique_string = function (numbytes) {
@@ -47,8 +47,8 @@ exports.getRemoteIp = function(req) {
 exports.isValidReferer = function(ref) {
 	if(typeof(ref) === 'undefined') return false;
 	var result = 
-		(ref.match(/^http(s)?:\/\/(www\.)?yourdomain.com.*/) != null) ||
-		(ref.match(/^http(s)?:\/\/localhost(:\d+)?\/.*?$/) != null);
+		(ref.match(config.refererRegex) != null) ||
+		(ref.match(/^http(s)?:\/\/localhost(:\d+)?\/.*?$/i) != null);
 	return(result);
 };
 

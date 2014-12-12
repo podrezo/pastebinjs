@@ -1,6 +1,7 @@
-{
+module.exports = {
 	"listenport" : 8000,
-	"checkReferer" : true,
+	"checkReferer" : false,
+	"refererRegex" : /^http(s)?:\/\/(www\.)?yourdomain.com.*/i,
 	"maxRecentPosts" : 10,
 	"postRestrictions" : {
 		"titleLength": 50,

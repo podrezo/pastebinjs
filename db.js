@@ -1,3 +1,4 @@
+'use strict';
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/pastebinjs');
 var Schema = mongoose.Schema

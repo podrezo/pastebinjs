@@ -1,6 +1,6 @@
 var dateFormat = require('dateformat')
   , winston = require('winston')
-  , config = require(__dirname+'/config.json');
+  , config = require('./config');
 
 var transports;
 if(typeof(config.logFilePath) !== 'undefined') {
