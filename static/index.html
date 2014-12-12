@@ -1,32 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A lightweight pastebin written in node.js">
     <meta name="author" content="Petro Podrezo">
-	{{? typeof(it.post) !== 'undefined' && it.post.hidden}}
-	<meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/>
-	{{?}}
-    <link rel="shortcut icon" href="/ico/favicon.png">
+	<!-- TODO make this show up for hidden posts <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/> -->
+    <link rel="shortcut icon" href="/static/ico/favicon.png">
 
     <title>pastebin.js</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.css" rel="stylesheet"/>
-	<link href="/css/syntax.css" rel="stylesheet"/>
+    <link href="/static/css/bootstrap.css" rel="stylesheet"/>
 
     <!-- Custom styles for this template -->
-    <link href="/css/sticky-footer-navbar.css" rel="stylesheet"/>
+    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet"/>
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="/js/html5shiv.js"></script>
-      <script src="/js/respond.min.js"></script>
+      <script src="/static/js/html5shiv.js"></script>
+      <script src="/static/js/respond.min.js"></script>
     <![endif]-->
+	
+	<!-- Angular.JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
+	<script src="/static/js/controllers.js"></script>
   </head>
 
-  <body>
+  <body ng-controller="RecentPostsController">
 
     <!-- Wrap all page content here -->
     <div id="wrap">
@@ -40,17 +41,15 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">pastebin.js</a>
+            <a class="navbar-brand" href="/static/">pastebin.js</a>
           </div>
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <!--<li{{?it.menuActiveSubmit}} class="active"{{?}}><a href="/">Submit</a></li>-->
+              <!--<li{{?it.menuActiveSubmit}} class="active"{{?}}><a href="/static/">Submit</a></li>-->
               <li class="dropdown">
-                <a href="/#" class="dropdown-toggle" data-toggle="dropdown">Recent Posts <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recent Posts <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-					<!--{{~it.recentPosts : p }}
-					<li><a href="/p/{{=p._id}}">{{=p.title}} <span class="label label-primary">{{=p.language}}</span></a></li>
-					{{~}}-->
+					<li ng-repeat="post in recentPosts"><a href="/static/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a></li>
 					<!--li class="divider"></li>
 					<li class="dropdown-header">Nav header</li-->
                 </ul>
@@ -59,7 +58,7 @@
           </div><!--/.nav-collapse -->
         </div>
       </div>
-      {{=it.body}}
+      <!-- BODY -->
 	</div>
 	
     <div id="footer">
@@ -71,8 +70,8 @@
 
     <!-- JavaScript
     ================================================== -->
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 	<!--<script>$('#inputLang').val('{{?typeof(it.post) !== 'undefined'}}{{=it.post.language}}{{??true}}text{{?}}');</script>-->
   </body>
 </html>
