@@ -1,119 +1,200 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A lightweight pastebin written in node.js">
-    <meta name="author" content="Petro Podrezo">
+
+<html lang="en" ng-app="pastebinjsApp">
+<head>
+	<base href="/static">
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport">
+	<meta content="A lightweight pastebin written in node.js" name=
+	"description">
+	<meta content="Petro Podrezo" name="author">
 	<!-- TODO make this show up for hidden posts <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/> -->
-    <link rel="shortcut icon" href="/static/ico/favicon.png">
+	<link href="/static/ico/favicon.png" rel="shortcut icon">
 
-    <title>pastebin.js</title>
+	<title>pastebin.js</title><!-- Bootstrap core CSS -->
+	<link href="/static/css/bootstrap.css" rel="stylesheet">
+	<!-- Custom styles for this template -->
+	<link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	  <script src="/static/js/html5shiv.js"></script>
+	  <script src="/static/js/respond.min.js"></script>
+	<![endif]-->
+</head>
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.css" rel="stylesheet"/>
+<body ng-controller="MainController">
+	<!-- Wrap all page content here -->
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet"/>
+	<div id="wrap">
+		<!-- Fixed navbar -->
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="/static/js/html5shiv.js"></script>
-      <script src="/static/js/respond.min.js"></script>
-    <![endif]-->
-	
-	<!-- Angular.JS -->
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
-	<script src="/static/js/controllers.js"></script>
-  </head>
+		<div class="navbar navbar-default navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button class="navbar-toggle" data-target=
+					".navbar-collapse" data-toggle="collapse" type=
+					"button"><span class="icon-bar"></span> <span class=
+					"icon-bar"></span> <span class="icon-bar"></span></button>
+					<a class="navbar-brand" href="/static/">pastebin.js</a>
+				</div>
 
-  <body ng-controller="RecentPostsController">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="/">Submit</a>
+						</li>
 
-    <!-- Wrap all page content here -->
-    <div id="wrap">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								Recent Posts <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li ng-repeat="post in recentPosts">
+									<a href="/static/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
+								</li>
+								<!--li class="divider"></li>
+								<li class="dropdown-header">Nav header</li-->
+							</ul>
+						</li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div><!-- BODY -->
 
-      <!-- Fixed navbar -->
-      <div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/static/">pastebin.js</a>
-          </div>
-          <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <!--<li{{?it.menuActiveSubmit}} class="active"{{?}}><a href="/static/">Submit</a></li>-->
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Recent Posts <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-					<li ng-repeat="post in recentPosts"><a href="/static/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a></li>
-					<!--li class="divider"></li>
-					<li class="dropdown-header">Nav header</li-->
-                </ul>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-      <!-- BODY -->
-	</div>
-	
-    <div id="footer">
-      <div class="container">
-        <p class="text-muted credit">Powered by <a href="https://github.com/podrezo/pastebinjs">pastebin.js</a>, created by <a href="http://podrezo.com/">Petro Podrezo</a>. Big thanks to the folks at <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
-      </div>
-    </div>
+		<div class="container">
+			<div class="alert alert-success" style="margin-top: 2em;" ng-hide="!deletePassword">
+				<button class="close" data-dismiss="alert" type=
+				"button">&times;</button> <strong>Post is live!</strong> The
+				post was successfully added to our database. If you need to
+				delete it, please use the following password: <code class=
+				"lead">{{deletePassword}}</code>
+			</div>
 
+			
+			<div id="postContent" ng-hide="!postId">
+				<div class="page-header">
+					<h1>Untitled Post <small>datehere</small></h1>
+				</div>
+				
+				POST HTML HERE
 
-    <!-- JavaScript
-    ================================================== -->
-    <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-	<!--<script>$('#inputLang').val('{{?typeof(it.post) !== 'undefined'}}{{=it.post.language}}{{??true}}text{{?}}');</script>-->
-  </body>
-</html>
-<!--{{##def.newpostform:
-	<form role="form" action="/" method="POST">
-		<div class="form-group">
-			<label for="inputTitle" class="control-label">Post Title</label>
-			<input name="title" id="inputTitle" autocomplete="off" maxlength="{{=it.config.postRestrictions.titleLength}}" class="form-control" placeholder="Untitled Post"{{?typeof(it.post) !== 'undefined' && it.post.title != null}} value="{{=it.post.title}}"{{?}}/>
-		</div>
-		<div class="form-group">
-			<label for="inputPaste" class="control-label">Paste (max. {{=it.config.postRestrictions.pasteLength}} bytes)</label>
-			<textarea id="inputPaste" maxlength="{{=it.config.postRestrictions.pasteLength}}" class="form-control" name="paste" rows="15" style="font-family:monospace;">{{?typeof(it.post) !== 'undefined'}}{{=it.post.paste}}{{?}}</textarea>
-		</div>
-		<div class="form-group">
-			<label for="inputLang" class="control-label">Source Language</label>
-			<select name="lang" id="inputLang" class="form-control">
-				{{~it.languages : lang : index}}
-				<option value="{{=lang.alias}}">{{=lang.name}}</option>
-				{{~}}
-			</select>
-		</div>
-		<div class="form-group">
-			<label for="inputExpiry" class="control-label">Expiry Time</label>
-			<select name="expiry" id="inputExpiry" class="form-control">
-				<option value="0">Never</option>
-				<option value="5">5 Minutes</option>
-				<option value="30">30 Minutes</option>
-				<option value="60">1 Hour</option>
-				<option value="480">8 Hours</option>
-				<option value="1440">1 Day</option>
-				<option value="20160">2 Weeks</option>
-			</select>
-		</div>
-		<div class="form-group">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="hidden"{{?typeof(it.post) !== 'undefined' && it.post.hidden}} checked="checked"{{?}}/> Make this post hidden (tell search engines not to crawl it, hide it from 'recent posts')
-				</label>
+				<div class="text-right">
+					<a class="btn btn-default" href="/dl/{{postId}}"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
+				</div>
+				<hr style="margin: 1.5em 0 5em 0;">
+			</div>
+
+			<div class="well">
+				<h2>Update Post</h2>
+
+				<form action="/" method="post">
+					<div class="form-group">
+						<label class="control-label" for="inputTitle">Post
+						Title</label> <input autocomplete="off" class=
+						"form-control" id="inputTitle" maxlength=
+						"{{restrictions.titleLength}}" name=
+						"title" placeholder="Untitled Post" value=
+						"{{postTitle}}">
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" for="inputPaste">Paste
+						(max. {{restrictions.pasteLength}}
+						bytes)</label> 
+						<textarea class="form-control" id="inputPaste"
+						maxlength="{{restrictions.pasteLength}}"
+						name="paste" rows="15" style="font-family:monospace;">{{postData}}</textarea>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" for="inputLang">Source Language</label>
+						<select class="form-control" id="inputLang" name="lang">
+							<option ng-repeat="language in languages" value="{{language.alias}}">{{language.name}}</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label" for="inputExpiry">ExpiryTime</label>
+						<select class="form-control" id="inputExpiry" name="expiry">
+							<option value="0">
+								Never
+							</option>
+
+							<option value="5">
+								5 Minutes
+							</option>
+
+							<option value="30">
+								30 Minutes
+							</option>
+
+							<option value="60">
+								1 Hour
+							</option>
+
+							<option value="480">
+								8 Hours
+							</option>
+
+							<option value="1440">
+								1 Day
+							</option>
+
+							<option value="20160">
+								2 Weeks
+							</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<div class="checkbox">
+							<label><input checked="checked" name="hidden" type=
+							"checkbox"> Make this post hidden (tell search
+							engines not to crawl it, hide it from 'recent
+							posts')</label>
+						</div>
+					</div>
+
+					<div class="form-group text-right">
+						<button class="btn btn-primary" type=
+						"submit"><span class=
+						"glyphicon glyphicon-upload"></span> Submit</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="well" ng-hide="!postId">
+				<h2>Delete Post</h2>
+
+				<form action="/" method="post">
+					<div class="form-group">
+						<label for="inputPassword">Enter the password to delete the post</label>
+						<input class="form-control" id="inputPassword" name="deletepassword" placeholder="This was provided when you created your post" type="text">
+					</div>
+
+					<div class="text-right">
+						<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
+					</div>
+				</form>
 			</div>
 		</div>
-		<div class="form-group text-right">
-			<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-upload"></span> Submit</button>
+	</div>
+
+	<div id="footer">
+		<div class="container">
+			<p class="text-muted credit">Powered by <a href=
+			"https://github.com/podrezo/pastebinjs">pastebin.js</a>, created by
+			<a href="http://podrezo.com/">Petro Podrezo</a>. Big thanks to the
+			folks at <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
 		</div>
-	</form>
-#}}-->
+	</div>
+	<!-- JavaScript
+	==================================================
+	-->
+	<script src="/static/js/jquery.min.js"></script> <script src="/static/js/bootstrap.min.js"></script> 
+	<!-- Angular.JS -->
+	<script src="/static/js/angular.min.js"></script>
+	<script src="/static/js/angular-route.min.js"></script>
+	<script src="/static/js/controllers.js"></script>
+</body>
+</html>

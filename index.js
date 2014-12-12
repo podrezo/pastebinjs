@@ -16,6 +16,9 @@ app.use('/static', express.static(__dirname + '/static'));
 app.get('/', function (req, res) {
 	res.redirect('/static/index.html');
 });
+app.get('/static/p/:postId', function (req, res) {
+	res.redirect('/static/index.html');
+});
 
 app.get('/api/recent',
 	controllers.api.getRecentPosts);
