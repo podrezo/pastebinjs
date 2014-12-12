@@ -1,0 +1,90 @@
+[
+  {
+    "type": "delete",
+    "url": "/api/post/:postId",
+    "title": "Delete a post",
+    "name": "deletePost",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Deletes a post</p>",
+    "parameter": {
+      "fields": {
+        "Query String": [
+          {
+            "group": "Query String",
+            "type": "String",
+            "field": "field",
+            "optional": false,
+            "description": "<p>=password The password to delete the document</p>"
+          }
+        ]
+      }
+    },
+    "filename": "./controllers/api.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/post/:postId/download",
+    "title": "Download Post As File",
+    "name": "downloadPost",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Sends the post content as a file download</p>",
+    "filename": "./controllers/api.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/post/:postId",
+    "title": "Retrieve Post",
+    "name": "getPost",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Retrieves data for a post</p>",
+    "success": {
+      "examples": [
+        {
+          "title": "Successful Response",
+          "content": "{\n \"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\",\n \"title\" : \"Hello World Example\",\n \"language\" : \"csharp\",\n \"expiry\": null,\n \"hidden\": true\n}\n",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./controllers/api.js"
+  },
+  {
+    "type": "post",
+    "url": "/api/post",
+    "title": "Create Post",
+    "name": "submitPost",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Creates a new post</p>",
+    "examples": [
+      {
+        "title": "Example Body",
+        "content": "{\n\"title\" : \"Hello World Example\",\n\"lang\": \"csharp\",\n\"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\"\n\"hidden\" : false,\n\"expiry\" : 3600\n}\n",
+        "type": "JSON"
+      }
+    ],
+    "filename": "./controllers/api.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/recent",
+    "title": "Retrieve recent posts",
+    "name": "getRecentPosts",
+    "group": "Recent_Posts",
+    "version": "1.0.0",
+    "description": "<p>Gets a list of recent posts.</p>",
+    "success": {
+      "examples": [
+        {
+          "title": "Successful Response",
+          "content": "{\n  \"posts\": [\n      {\n          \"title\": \"Test Post\",\n          \"language\": \"csharp\",\n          \"_id\": \"548b2cddf59e4ffc12000001\"\n      }\n  ]\n}\n",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./controllers/api.js"
+  }
+]

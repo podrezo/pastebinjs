@@ -5,6 +5,25 @@ var db = require('../db')
   , logger = require('../logger').logger
   , common = require('../common');
 
+/**
+ * @api {get} /api/recent Retrieve recent posts
+ * @apiName getRecentPosts
+ * @apiGroup Recent Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Gets a list of recent posts.
+ *
+ * @apiSuccessExample {json} Successful Response
+ * {
+ *    "posts": [
+ *        {
+ *            "title": "Test Post",
+ *            "language": "csharp",
+ *            "_id": "548b2cddf59e4ffc12000001"
+ *        }
+ *    ]
+ *} */
 exports.getRecentPosts = function(req,res) {
 	var query = db.Post.find({ hidden: false }, 'title language _id', {limit: 10, sort: {'_id': -1}});
 	query.exec(function(err, posts) {
@@ -17,6 +36,23 @@ exports.getRecentPosts = function(req,res) {
 	
 };
 
+/**
+ * @api {get} /api/post/:postId Retrieve Post
+ * @apiName getPost
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Retrieves data for a post
+ *
+ * @apiSuccessExample {json} Successful Response
+ * {
+ *	 "paste" : "Console.WriteLine(\"Hello World\");",
+ *   "title" : "Hello World Example",
+ *   "language" : "csharp",
+ *   "expiry": null,
+ *   "hidden": true
+ * } */
 exports.getPost = function(req, res) {
 	db.Post.findOne({
 		_id : req.params.postId
@@ -39,6 +75,23 @@ exports.getPost = function(req, res) {
 	});
 };
 
+/**
+ * @api {post} /api/post Create Post
+ * @apiName submitPost
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Creates a new post
+ *
+ * @apiExample {JSON} Example Body
+ * {
+ *  "title" : "Hello World Example",
+ *  "lang": "csharp",
+ *  "paste" : "Console.WriteLine(\"Hello World\");"
+ *  "hidden" : false,
+ *  "expiry" : 3600
+ * } */
 exports.submitPost = function(req,res) {
 	// check referrer, if required
 	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
@@ -55,6 +108,12 @@ exports.submitPost = function(req,res) {
 	}
 	if (!_.isString(req.body.paste)) {
 		return res.status(400).send('Missing content in body');
+	}
+	if (!_.isBoolean(req.body.hidden)) {
+		return res.status(400).send('Missing hidden property in body');
+	}
+	if (!_.isNumber(req.body.expiry)) {
+		return res.status(400).send('Missing expiry in body');
 	}
 	var title = req.body.title.trim();
 	// validate length of fields
@@ -95,6 +154,16 @@ exports.submitPost = function(req,res) {
 	});
 };
 
+/**
+ * @api {delete} /api/post/:postId Delete a post
+ * @apiName deletePost
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Deletes a post
+ *
+ * @apiParam (Query String) {String} field=password The password to delete the document */
 exports.deletePost = function(req, res) {
 	db.Post.findOne({
 		_id : req.params.postId
@@ -119,6 +188,14 @@ exports.deletePost = function(req, res) {
 	});
 };
 
+/**
+ * @api {get} /api/post/:postId/download Download Post As File
+ * @apiName downloadPost
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Sends the post content as a file download */
 exports.downloadPost = function (req, res) {
 	// check referrer, if required
 	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
