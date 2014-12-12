@@ -1,26 +1,25 @@
 'use strict';
 var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute']);
 
+pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
+    var factory = {};
+    factory.getRecentPosts = function() {
+        var deferred = $q.defer();  //init promise
+        $http('/api/recent')
+        .success(function(data, status, headers, config) {
+            deferred.resolve(data.posts);
+        })
+        .error(function(data, status, headers, config) {
+            deferred.reject();
+        });
+        return deferred.promise;
+    }
+    return factory;
+}]);
+
 pastebinjsApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
       $routeProvider
-        /*.when('/Book/:bookId/ch/:chapterId', {
-          templateUrl: 'chapter.html',
-          controller: 'ChapterCtrl',
-          //controllerAs: 'chapter'
-        })
-		.when('/SignIn', {
-			templateUrl: 'signin.html',
-			controller: 'SignInController'
-		})
-		.when('/Register', {
-			templateUrl: 'register.html',
-			controller: 'RegisterController'
-		})
-		.when('/About', {
-			templateUrl: 'about.html',
-			controller: 'AboutController'
-		})*/
 		.when('/static/p/:postId', {
 			templateUrl: '/static/index.html',
 			controller: 'MainController'
@@ -33,18 +32,13 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
       // configure html5 to get links working on jsfiddle
       $locationProvider.html5Mode(true);
   }])
-.controller('MainController', function($scope, $route, $routeParams, $location) {
+.controller('MainController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
 	$scope.postId = $routeParams.postId;
-	/*$scope.$on('$routeChangeSuccess', function(next, current) {
-		alert("Route changed to "+JSON.stringify(current));
-	});*/
-	$scope.recentPosts = [
-        {
-            "title": "Test Post",
-            "language": "csharp",
-            "_id": "548b2cddf59e4ffc12000001"
-        }
-    ];
+	//$scope.recentPosts = datfactory.getRecentPosts();
+	dataFactory.getRecentPosts()
+	.then(function(recentPosts) {
+		$scope.recentposts = recentPosts;
+	});
 	$scope.languages = [
 		{ name: 'Shell Script (bash)', alias: 'bash' },
 		{ name: 'Erlang', alias: 'erlang' },
