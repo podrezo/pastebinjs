@@ -5,7 +5,7 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     var factory = {};
     factory.getRecentPosts = function() {
         var deferred = $q.defer();  //init promise
-        $http('/api/recent')
+        $http.get('/api/recent')
         .success(function(data, status, headers, config) {
             deferred.resolve(data.posts);
         })
@@ -21,11 +21,11 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
       $routeProvider
 		.when('/static/p/:postId', {
-			templateUrl: '/static/index.html',
+			templateUrl: '/static/views/post.html',
 			controller: 'MainController'
 		})
 		.otherwise({
-			templateUrl: '/static/index.html',
+			templateUrl: '/static/views/post.html',
 			controller: 'MainController'
 		});
 
@@ -34,10 +34,10 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
   }])
 .controller('MainController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
 	$scope.postId = $routeParams.postId;
-	//$scope.recentPosts = datfactory.getRecentPosts();
+	$scope.recentPosts = [];
 	dataFactory.getRecentPosts()
 	.then(function(recentPosts) {
-		$scope.recentposts = recentPosts;
+		$scope.recentPosts = recentPosts;
 	});
 	$scope.languages = [
 		{ name: 'Shell Script (bash)', alias: 'bash' },

@@ -132,7 +132,7 @@ exports.submitPost = function(req,res) {
 			title : title,
 			language : req.body.lang,
 			ip : common.getRemoteIp(req),
-			hidden : typeof(req.body.hidden) !== 'undefined',
+			hidden : req.body.hidden,
 			deletepassword : (Math.round(Math.random()*8999)+1000).toString()
 		});
 	
