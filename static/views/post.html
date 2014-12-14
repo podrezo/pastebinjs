@@ -25,28 +25,28 @@
 
 	<form action="/" method="post">
 		<div class="form-group">
-			<label class="control-label" for="inputTitle">Post Title ({{postData.title.length}}/{{config.postRestrictions.titleLength}} characters)</label> 
-			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-model="postData.title">
+			<label class="control-label" for="inputTitle">Post Title ({{newPost.title.length}}/{{config.postRestrictions.titleLength}} characters)</label> 
+			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-model="newPost.title">
 		</div>
 
 		<div class="form-group">
 			<label class="control-label" for="inputPaste">Paste (max. {{config.postRestrictions.pasteLength}} bytes)</label> 
-			<textarea class="form-control" id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" name="paste" rows="15" style="font-family:monospace;" ng-model="postData.paste"></textarea>
+			<textarea class="form-control" id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" name="paste" rows="15" style="font-family:monospace;" ng-model="newPost.paste"></textarea>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label" for="inputLang">Source Language</label>
-			<select class="form-control" id="inputLang" name="lang" ng-model="postData.language" ng-options="item.alias as item.name for item in config.supportedLanguages"></select>
+			<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.alias as item.name for item in config.supportedLanguages"></select>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label" for="inputExpiry">Expiry Time</label>
-			<select class="form-control" id="inputExpiry" name="expiry" ng-model="postData.expiryValue" ng-options="item.time as item.label for item in config.supportedExpiryTimes"></select>
+			<select class="form-control" id="inputExpiry" name="expiry" ng-model="newPost.expiry" ng-options="item.time as item.label for item in config.supportedExpiryTimes"></select>
 		</div>
 
 		<div class="form-group">
 			<div class="checkbox">
-				<label><input name="hidden" type="checkbox" ng-checked="{{postData.hidden}}"> Make this post hidden (tell search engines not to crawl it, hide it from 'recent posts')</label>
+				<label><input name="hidden" type="checkbox" ng-checked="{{newPost.hidden}}"> Make this post hidden (tell search engines not to crawl it, hide it from 'recent posts')</label>
 			</div>
 		</div>
 

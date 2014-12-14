@@ -78,16 +78,23 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		dataFactory.getPost($scope.postId)
 		.then(function(postData) {
 			$scope.postData = postData;
+			$scope.newPost = {
+				language: postData.language,
+				expiry: postData.expiryValue,
+				hidden: postData.hidden,
+				paste: postData.paste,
+				title: postData.title
+			};
 		});
 	}
 	// set defaults
 	else {
-		$scope.postData = {
+		$scope.newPost = {
 			language: 'text',
-			expiryValue: 0,
+			expiry: 0,
 			hidden: false,
 			paste: '',
 			title: ''
-		}
+		};
 	}
 });
