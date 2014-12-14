@@ -9,13 +9,13 @@
 
 <div id="postContent" ng-hide="!postId">
 	<div class="page-header">
-		<h1>Untitled Post <small>datehere</small></h1>
+		<h1>{{postData.title}} <small>{{postData.createdAt}}</small></h1>
 	</div>
 	
 	POST HTML HERE
 
 	<div class="text-right">
-		<a class="btn btn-default" href="/dl/{{postId}}"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
+		<a class="btn btn-default" href="/api/post/{{postId}}/download"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
 	</div>
 	<hr style="margin: 1.5em 0 5em 0;">
 </div>
@@ -25,76 +25,35 @@
 
 	<form action="/" method="post">
 		<div class="form-group">
-			<label class="control-label" for="inputTitle">Post
-			Title</label> <input autocomplete="off" class=
-			"form-control" id="inputTitle" maxlength=
-			"{{config.postRestrictions.titleLength}}" name=
-			"title" placeholder="Untitled Post" value=
-			"{{postTitle}}">
+			<label class="control-label" for="inputTitle">Post Title ({{postData.title.length}}/{{config.postRestrictions.titleLength}} characters)</label> 
+			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-value="postData.title">
 		</div>
 
 		<div class="form-group">
-			<label class="control-label" for="inputPaste">Paste
-			(max. {{config.postRestrictions.pasteLength}}
-			bytes)</label> 
+			<label class="control-label" for="inputPaste">Paste (max. {{config.postRestrictions.pasteLength}} bytes)</label> 
 			<textarea class="form-control" id="inputPaste"
 			maxlength="{{config.postRestrictions.pasteLength}}"
-			name="paste" rows="15" style="font-family:monospace;">{{postData}}</textarea>
+			name="paste" rows="15" style="font-family:monospace;">{{postData.paste}}</textarea>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label" for="inputLang">Source Language</label>
-			<select class="form-control" id="inputLang" name="lang">
-				<option ng-repeat="language in languages" value="{{language.alias}}">{{language.name}}</option>
-			</select>
+			<select class="form-control" id="inputLang" name="lang" ng-model="postData.language" ng-options="item.alias as item.name for item in languages"></select>
 		</div>
 
 		<div class="form-group">
-			<label class="control-label" for="inputExpiry">ExpiryTime</label>
-			<select class="form-control" id="inputExpiry" name="expiry">
-				<option value="0">
-					Never
-				</option>
-
-				<option value="5">
-					5 Minutes
-				</option>
-
-				<option value="30">
-					30 Minutes
-				</option>
-
-				<option value="60">
-					1 Hour
-				</option>
-
-				<option value="480">
-					8 Hours
-				</option>
-
-				<option value="1440">
-					1 Day
-				</option>
-
-				<option value="20160">
-					2 Weeks
-				</option>
-			</select>
+			<label class="control-label" for="inputExpiry">Expiry Time</label>
+			<select class="form-control" id="inputExpiry" name="expiry" ng-model="selectedExpiryTime" ng-options="item.time as item.label for item in expiryTimes"></select>
 		</div>
 
 		<div class="form-group">
 			<div class="checkbox">
-				<label><input checked="checked" name="hidden" type=
-				"checkbox"> Make this post hidden (tell search
-				engines not to crawl it, hide it from 'recent
-				posts')</label>
+				<label><input name="hidden" type="checkbox" ng-checked="{{postData.hidden}}"> Make this post hidden (tell search engines not to crawl it, hide it from 'recent posts')</label>
 			</div>
 		</div>
 
 		<div class="form-group text-right">
-			<button class="btn btn-primary" type=
-			"submit"><span class=
-			"glyphicon glyphicon-upload"></span> Submit</button>
+			<button class="btn btn-primary btn-lg" type="submit"><span class="glyphicon glyphicon-upload"></span> Submit</button>
 		</div>
 	</form>
 </div>

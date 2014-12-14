@@ -25,6 +25,17 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
         });
         return deferred.promise;
     }
+	factory.getPost = function(postId) {
+        var deferred = $q.defer();
+        $http.get('/api/post/'+postId)
+        .success(function(data, status, headers, config) {
+            deferred.resolve(data);
+        })
+        .error(function(data, status, headers, config) {
+            deferred.reject();
+        });
+        return deferred.promise;
+    }
     return factory;
 }]);
 
@@ -56,13 +67,22 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	.then(function(configData) {
 		$scope.config = configData;
 	});
+	$scope.expiryTimes = [
+		{ label: "Never", time: 0 },
+		{ label: "5 Minutes", time: 5 },
+		{ label: "30 Minutes", time: 30 },
+		{ label: "An Hour", time: 60 },
+		{ label: "Eight Hours", time: 480 },
+		{ label: "A Day", time: 1440 },
+		{ label: "Two Weeks", time: 20160 }
+	];
 	$scope.languages = [
 		{ name: 'Shell Script (bash)', alias: 'bash' },
 		{ name: 'Erlang', alias: 'erlang' },
 		{ name: 'C#', alias: 'cs' },
 		{ name: 'Ruby-on-Rails', alias: 'ruby' },
 		{ name: 'Diff/Patch', alias: 'diff' },
-		{ name: 'javascript', alias: 'javascript' },
+		{ name: 'JavaScript', alias: 'javascript' },
 		{ name: 'LUA', alias: 'lua' },
 		{ name: 'XML', alias: 'xml' },
 		{ name: 'Markdown', alias: 'markdown' },
@@ -100,5 +120,25 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	];
 })
 .controller('PostController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
+	// all new/updated posts dont expire by default
+	$scope.selectedExpiryTime = 0;
+	// get the post ID from the URL parameters
 	$scope.postId = $routeParams.postId;
+	// if a post id is specified, load the post
+	if($scope.postId) {
+		dataFactory.getPost($scope.postId)
+		.then(function(postData) {
+			$scope.postData = postData;
+		});
+	}
+	// set defaults
+	else {
+		$scope.postData = {
+			language: 'text',
+			expiry: 0,
+			hidden: false,
+			paste: '',
+			title: ''
+		}
+	}
 });

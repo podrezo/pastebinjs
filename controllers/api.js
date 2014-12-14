@@ -71,7 +71,8 @@ exports.getRecentPosts = function(req,res) {
  *	 "paste" : "Console.WriteLine(\"Hello World\");",
  *   "title" : "Hello World Example",
  *   "language" : "csharp",
- *   "expiry": null,
+ *   "expiry": "2014-12-28T01:43:25.101Z",
+ *   "createdAt" : "2014-12-27T01:43:25.101Z",
  *   "hidden": true
  * } */
 exports.getPost = function(req, res) {
@@ -88,6 +89,7 @@ exports.getPost = function(req, res) {
 			  , title : post.title
 			  , language : post.language
 			  , expiry: post.expiry
+			  , createdAt: post.createdAt
 			  , hidden: post.hidden
 			});
 		} else {
