@@ -61,6 +61,36 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     return factory;
 }]);
 
+pastebinjsApp.factory('helperFactory', [function () {
+    var factory = {};
+    factory.getTimeSince = function(date) {
+        var seconds = Math.floor((new Date() - date) / 1000);
+		var interval = Math.floor(seconds / 31536000);
+
+		if (interval > 1) {
+			return interval + " years";
+		}
+		interval = Math.floor(seconds / 2592000);
+		if (interval > 1) {
+			return interval + " months";
+		}
+		interval = Math.floor(seconds / 86400);
+		if (interval > 1) {
+			return interval + " days";
+		}
+		interval = Math.floor(seconds / 3600);
+		if (interval > 1) {
+			return interval + " hours";
+		}
+		interval = Math.floor(seconds / 60);
+		if (interval > 1) {
+			return interval + " minutes";
+		}
+		return Math.floor(seconds) + " seconds";
+    };
+    return factory;
+}]);
+
 pastebinjsApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
       $routeProvider
@@ -90,7 +120,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		$scope.config = configData;
 	});	
 })
-.controller('PostController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
+.controller('PostController', function($scope, $route, $routeParams, $location, $http, dataFactory, helperFactory) {
 	// all new/updated posts dont expire by default
 	$scope.selectedExpiryTime = 0;
 	// get the post ID from the URL parameters
@@ -105,6 +135,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		dataFactory.getPost($scope.postId)
 		.then(function(postData) {
 			$scope.postData = postData;
+			$scope.postedTimeAgo = helperFactory.getTimeSince(new Date(postData.expiry));
 			$scope.newPost = {
 				language: postData.language,
 				expiry: postData.expiryValue,
