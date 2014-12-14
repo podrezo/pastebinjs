@@ -20,6 +20,8 @@ app.get('/static/p/:postId', function (req, res) {
 	res.redirect('/static/index.html');
 });
 
+app.get('/api/config',
+	controllers.api.getConfig);
 app.get('/api/recent',
 	controllers.api.getRecentPosts);
 app.get('/api/post/:postId',

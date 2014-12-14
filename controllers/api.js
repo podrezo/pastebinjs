@@ -6,6 +6,27 @@ var db = require('../db')
   , common = require('../common');
 
 /**
+ * @api {get} /api/config Retrieve pastebin configuration
+ * @apiName getConfig
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Gets a subset of the configuration to let the client know things 
+ *  like the maximum number of characters in a post.
+ *
+ * @apiSuccessExample {json} Successful Response
+ * {
+ *    "postRestrictions" : {
+ * 		"titleLength": 50,
+ * 		"pasteLength" : 524288
+ *    }
+ * } */
+exports.getConfig = function(req,res) {
+	return res.status(200).send({postRestrictions: config.postRestrictions});
+};
+  
+/**
  * @api {get} /api/recent Retrieve recent posts
  * @apiName getRecentPosts
  * @apiGroup Recent Posts

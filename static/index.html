@@ -22,7 +22,7 @@
 	<![endif]-->
 </head>
 
-<body>
+<body ng-controller="MainController">
 	<!-- Wrap all page content here -->
 
 	<div id="wrap">
@@ -44,7 +44,7 @@
 							<a href="/">Submit</a>
 						</li>
 
-						<li class="dropdown">
+						<li class="dropdown" ng-controller="RecentPostsController">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 								Recent Posts <b class="caret"></b>
 							</a>
@@ -68,10 +68,8 @@
 
 	<div id="footer">
 		<div class="container">
-			<p class="text-muted credit">Powered by <a href=
-			"https://github.com/podrezo/pastebinjs">pastebin.js</a>, created by
-			<a href="http://podrezo.com/">Petro Podrezo</a>. Big thanks to the
-			folks at <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
+			<p class="text-muted credit">Powered by <a href="https://github.com/podrezo/pastebinjs">pastebin.js</a>, created by <a href="http://podrezo.com/">Petro Podrezo</a>. 
+			Big thanks to the folks at <a href="http://getbootstrap.com/">Bootstrap</a>.</p>
 		</div>
 	</div>
 	<!-- JavaScript

@@ -4,10 +4,21 @@ var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute']);
 pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     var factory = {};
     factory.getRecentPosts = function() {
-        var deferred = $q.defer();  //init promise
+        var deferred = $q.defer();
         $http.get('/api/recent')
         .success(function(data, status, headers, config) {
             deferred.resolve(data.posts);
+        })
+        .error(function(data, status, headers, config) {
+            deferred.reject();
+        });
+        return deferred.promise;
+    }
+	factory.getConfig = function() {
+        var deferred = $q.defer();
+        $http.get('/api/config')
+        .success(function(data, status, headers, config) {
+            deferred.resolve(data);
         })
         .error(function(data, status, headers, config) {
             deferred.reject();
@@ -22,22 +33,28 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
       $routeProvider
 		.when('/static/p/:postId', {
 			templateUrl: '/static/views/post.html',
-			controller: 'MainController'
+			controller: 'PostController'
 		})
 		.otherwise({
 			templateUrl: '/static/views/post.html',
-			controller: 'MainController'
+			controller: 'PostController'
 		});
 
       // configure html5 to get links working on jsfiddle
       $locationProvider.html5Mode(true);
   }])
-.controller('MainController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
-	$scope.postId = $routeParams.postId;
+.controller('RecentPostsController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
 	$scope.recentPosts = [];
 	dataFactory.getRecentPosts()
 	.then(function(recentPosts) {
 		$scope.recentPosts = recentPosts;
+	});
+})
+.controller('MainController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
+	$scope.recentPosts = [];
+	dataFactory.getConfig()
+	.then(function(configData) {
+		$scope.config = configData;
 	});
 	$scope.languages = [
 		{ name: 'Shell Script (bash)', alias: 'bash' },
@@ -81,4 +98,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		{ name: 'Go', alias: 'go' },
 		{ name: 'Plain Text', alias: 'text' }
 	];
+})
+.controller('PostController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
+	$scope.postId = $routeParams.postId;
 });
