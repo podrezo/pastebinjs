@@ -13,7 +13,7 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
             deferred.reject();
         });
         return deferred.promise;
-    }
+    };
 	factory.getConfig = function() {
         var deferred = $q.defer();
         $http.get('/api/config')
@@ -24,7 +24,7 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
             deferred.reject();
         });
         return deferred.promise;
-    }
+    };
 	factory.getPost = function(postId) {
         var deferred = $q.defer();
         $http.get('/api/post/'+postId)
@@ -35,14 +35,36 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
             deferred.reject();
         });
         return deferred.promise;
-    }
+    };
+	factory.submitPost = function(postData) {
+        var deferred = $q.defer();
+        $http({ method: 'POST', url: '/api/post', data: postData })
+        .success(function(data, status, headers, config) {
+            deferred.resolve(data);
+        })
+        .error(function(data, status, headers, config) {
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
+	factory.deletePost = function(postId, password) {
+        var deferred = $q.defer();
+        $http({ method: 'DELETE', url: '/api/post/' + postId, headers: { "Content-Type" : "application/json" }, data: { password: password } })
+        .success(function(data, status, headers, config) {
+            deferred.resolve();
+        })
+        .error(function(data, status, headers, config) {
+            deferred.reject(data);
+        });
+        return deferred.promise;
+    };
     return factory;
 }]);
 
 pastebinjsApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
       $routeProvider
-		.when('/static/p/:postId', {
+		.when('/p/:postId', {
 			templateUrl: '/static/views/post.html',
 			controller: 'PostController'
 		})
@@ -73,6 +95,11 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	$scope.selectedExpiryTime = 0;
 	// get the post ID from the URL parameters
 	$scope.postId = $routeParams.postId;
+	// we are not currently submitting
+	$scope.isCurrentlyProcessing = false;
+	// get values from querystring
+	$scope.deletePassword = $location.search().password;
+	$scope.finishedDeletingPost = $location.search().deleted;
 	// if a post id is specified, load the post
 	if($scope.postId) {
 		dataFactory.getPost($scope.postId)
@@ -86,6 +113,19 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 				title: postData.title
 			};
 		});
+		// method for deleting a post
+		$scope.deletePost = function() {
+			$scope.isCurrentlyProcessing = true;
+			dataFactory.deletePost($scope.postId,$scope.deletePassword)
+			.then(function(postData) {
+				$location.$$search = {}; // reset the potential 'deletepassword' query string parameter leftover
+				$location.path( "/" ).search('deleted',true);
+			},
+			function(err) {
+				alert('error: '+err);
+				$scope.isCurrentlyProcessing = false;
+			});
+		}
 	}
 	// set defaults
 	else {
@@ -96,5 +136,17 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			paste: '',
 			title: ''
 		};
+	}
+	// method for submitting
+	$scope.submitPost = function() {
+		$scope.isCurrentlyProcessing = true;
+		dataFactory.submitPost($scope.newPost)
+		.then(function(postData) {
+			$location.path( "/p/" + postData.id ).search('password',postData.deletePassword);
+		},
+		function(err) {
+			alert('error: '+err);
+			$scope.isCurrentlyProcessing = false;
+		});
 	}
 });

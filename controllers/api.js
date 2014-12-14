@@ -124,10 +124,15 @@ exports.getPost = function(req, res) {
  * @apiExample {JSON} Example Body
  * {
  *  "title" : "Hello World Example",
- *  "lang": "csharp",
+ *  "language": "csharp",
  *  "paste" : "Console.WriteLine(\"Hello World\");"
  *  "hidden" : false,
  *  "expiry" : 3600
+ * }
+ * @apiSuccessExample {json} Successful Response
+ * {
+ *	 "id" : "548da7e05b7c3d9c09abd416",
+ *   "deletePassword": "1234"
  * } */
 exports.submitPost = function(req,res) {
 	// check referrer, if required
@@ -148,6 +153,9 @@ exports.submitPost = function(req,res) {
 	}
 	if (!_.isBoolean(req.body.hidden)) {
 		return res.status(400).send('Missing hidden property in body');
+	}
+	if (!_.findWhere(config.supportedLanguages, {alias: req.body.language})) {
+		return res.status(400).send('Invalid or unsupported language');
 	}
 	if (!_.isNumber(req.body.expiry)) {
 		return res.status(400).send('Missing expiry in body');
@@ -177,7 +185,7 @@ exports.submitPost = function(req,res) {
 	var newPost = new db.Post({
 			paste : req.body.paste,
 			title : title,
-			language : req.body.lang,
+			language : req.body.language,
 			ip : common.getRemoteIp(req),
 			hidden : req.body.hidden,
 			expiryValue: req.body.expiry,
@@ -204,7 +212,10 @@ exports.submitPost = function(req,res) {
  * @apiDescription
  *  Deletes a post
  *
- * @apiParam (Query String) {String} field=password The password to delete the document */
+ * @apiExample {JSON} Example Body
+ * {
+ *  "password" : "1234",
+ * } */
 exports.deletePost = function(req, res) {
 	db.Post.findOne({
 		_id : req.params.postId
@@ -216,7 +227,7 @@ exports.deletePost = function(req, res) {
 		if (post == null) {
 			return res.status(404).send('No such post');
 		}
-		if (post.deletepassword != req.query.password) {
+		if (post.deletepassword !== req.body.password) {
 			return res.status(401).send('Invalid password to delete post');
 		}
 		post.remove(function(err) {

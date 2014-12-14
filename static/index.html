@@ -2,13 +2,12 @@
 
 <html lang="en" ng-app="pastebinjsApp">
 <head>
-	<base href="/static">
+	<base href="/">
 	<meta charset="utf-8">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<meta content="A lightweight pastebin written in node.js" name=
 	"description">
 	<meta content="Petro Podrezo" name="author">
-	<!-- TODO make this show up for hidden posts <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/> -->
 	<link href="/static/ico/favicon.png" rel="shortcut icon">
 
 	<title>pastebin.js</title><!-- Bootstrap core CSS -->
@@ -35,13 +34,13 @@
 					".navbar-collapse" data-toggle="collapse" type=
 					"button"><span class="icon-bar"></span> <span class=
 					"icon-bar"></span> <span class="icon-bar"></span></button>
-					<a class="navbar-brand" href="/static/">pastebin.js</a>
+					<a class="navbar-brand" href="/">pastebin.js</a>
 				</div>
 
 				<div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li class="active">
-							<a href="/">Submit</a>
+						<li>
+							<a href="/">New Post</a>
 						</li>
 
 						<li class="dropdown" ng-controller="RecentPostsController">
@@ -50,7 +49,7 @@
 							</a>
 							<ul class="dropdown-menu">
 								<li ng-repeat="post in recentPosts">
-									<a href="/static/p/{{post.id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
+									<a href="/p/{{post.id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
 								</li>
 								<!--li class="divider"></li>
 								<li class="dropdown-header">Nav header</li-->

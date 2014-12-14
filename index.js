@@ -12,12 +12,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/static', express.static(__dirname + '/static'));
 
-/* Home and Submit page */
 app.get('/', function (req, res) {
-	res.redirect('/static/index.html');
+	res.sendFile(__dirname + '/static/index.html');
 });
-app.get('/static/p/:postId', function (req, res) {
-	res.redirect('/static/index.html');
+app.get('/p/:postId', function (req, res) {
+	res.sendFile(__dirname + '/static/index.html');
 });
 
 app.get('/api/config',

@@ -6,6 +6,9 @@
 	"lead">{{deletePassword}}</code>
 </div>
 
+<div class="alert alert-success" style="margin-top: 2em;" ng-hide="!finishedDeletingPost">
+	<button class="close" data-dismiss="alert" type="button">&times;</button> <strong><span class="glyphicon glyphicon-trash"></span> Post has been deleted!</strong>
+</div>
 
 <div id="postContent" ng-hide="!postId">
 	<div class="page-header">
@@ -23,7 +26,7 @@
 <div class="well">
 	<h2>{{ postId ? 'Update' : 'New' }} Post</h2>
 
-	<form action="/" method="post">
+	<form>
 		<div class="form-group">
 			<label class="control-label" for="inputTitle">Post Title ({{newPost.title.length}}/{{config.postRestrictions.titleLength}} characters)</label> 
 			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-model="newPost.title">
@@ -46,12 +49,14 @@
 
 		<div class="form-group">
 			<div class="checkbox">
-				<label><input name="hidden" type="checkbox" ng-checked="{{newPost.hidden}}"> Make this post hidden (tell search engines not to crawl it, hide it from 'recent posts')</label>
+				<label><input name="hidden" type="checkbox" ng-checked="{{newPost.hidden}}"> Hide this post from showing up in 'recent posts'</label>
 			</div>
 		</div>
 
 		<div class="form-group text-right">
-			<button class="btn btn-primary btn-lg" type="submit"><span class="glyphicon glyphicon-upload"></span> Submit</button>
+			<button class="btn btn-primary btn-lg" ng-click="submitPost()" ng-disabled="isCurrentlyProcessing">
+				<span class="glyphicon glyphicon-upload"></span> {{isCurrentlyProcessing ? 'Please wait...' : 'Submit' }}
+			</button>
 		</div>
 	</form>
 </div>
@@ -59,14 +64,14 @@
 <div class="well" ng-hide="!postId">
 	<h2>Delete Post</h2>
 
-	<form action="/" method="post">
+	<form>
 		<div class="form-group">
 			<label for="inputPassword">Enter the password to delete the post</label>
-			<input class="form-control" id="inputPassword" name="deletepassword" placeholder="This was provided when you created your post" type="text">
+			<input class="form-control" id="inputPassword" name="deletepassword" ng-model="deletePassword" placeholder="This was provided when you created your post" type="text">
 		</div>
 
 		<div class="text-right">
-			<button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
+			<button class="btn btn-danger btn-lg" ng-click="deletePost()"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
 		</div>
 	</form>
 </div>
