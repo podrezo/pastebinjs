@@ -10,6 +10,7 @@ var postSchema = new Schema({
   , title : String
   , language : String
   , expiry: { type: Date, default: null }
+  , expiryValue: { type: Number, default: 0 }
   , createdAt: { type: Date, default: Date.now }
   , ip : String
   , hidden: { type: Boolean, default: false }

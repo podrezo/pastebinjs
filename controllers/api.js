@@ -23,7 +23,11 @@ var db = require('../db')
  *    }
  * } */
 exports.getConfig = function(req,res) {
-	return res.status(200).send({postRestrictions: config.postRestrictions});
+	return res.status(200).send({
+		postRestrictions: config.postRestrictions,
+		supportedExpiryTimes: config.supportedExpiryTimes,
+		supportedLanguages: config.supportedLanguages
+	});
 };
   
 /**
@@ -52,6 +56,14 @@ exports.getRecentPosts = function(req,res) {
 			logger.warn("Error while getting recent posts: " + err.toString());
 			return res.status(500).send('Failed to retrieve posts from database');
 		}
+		// transform the list to show language name instead of the shorthand
+		posts = _.map(posts,function(p) {
+			return {
+				id: p._id,
+				title: p.title,
+				language: (_.findWhere(config.supportedLanguages,{alias: p.language})).name
+			};
+		});
 		return res.status(200).send({posts: posts});
 	});
 	
@@ -72,6 +84,7 @@ exports.getRecentPosts = function(req,res) {
  *   "title" : "Hello World Example",
  *   "language" : "csharp",
  *   "expiry": "2014-12-28T01:43:25.101Z",
+ *   "expiryValue": 1440,
  *   "createdAt" : "2014-12-27T01:43:25.101Z",
  *   "hidden": true
  * } */
@@ -89,6 +102,7 @@ exports.getPost = function(req, res) {
 			  , title : post.title
 			  , language : post.language
 			  , expiry: post.expiry
+			  , expiryValue: post.expiryValue
 			  , createdAt: post.createdAt
 			  , hidden: post.hidden
 			});
@@ -137,6 +151,16 @@ exports.submitPost = function(req,res) {
 	}
 	if (!_.isNumber(req.body.expiry)) {
 		return res.status(400).send('Missing expiry in body');
+	} else {
+		// limit the expiry time to an integer
+		var expiry = parseInt(req.body.expiry);
+		if (!_.some(config.supportedExpiryTimes,function(t) { return(t.time === expiry); })) {
+			return res.status(400).send('Unsupported expiry time');
+		} else {
+			var dateValue = (new Date()).valueOf();
+			dateValue += expiry*60*1000; // expiry is in minutes but we need milliseconds
+			var expiryTime = (new Date()).setTime(dateValue);
+		}
 	}
 	var title = req.body.title.trim();
 	// validate length of fields
@@ -156,16 +180,10 @@ exports.submitPost = function(req,res) {
 			language : req.body.lang,
 			ip : common.getRemoteIp(req),
 			hidden : req.body.hidden,
+			expiryValue: req.body.expiry,
+			expiry: expiryTime,
 			deletepassword : (Math.round(Math.random()*8999)+1000).toString()
 		});
-	
-	// get the proper expiry date
-	var expiry = parseInt(req.body.expiry);
-	if(!isNaN(expiry) && expiry > 0) {
-		var dateValue = (new Date()).valueOf();
-		dateValue += expiry*60*1000; // expiry is in minutes but we need milliseconds
-		newPost.expiry = (new Date()).setTime(dateValue);
-	}
 	
 	newPost.save(function (err, post) {
 		if (err) {
