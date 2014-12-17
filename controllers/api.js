@@ -58,10 +58,11 @@ exports.getRecentPosts = function(req,res) {
 		}
 		// transform the list to show language name instead of the shorthand
 		posts = _.map(posts,function(p) {
+			var languageDetails = _.findWhere(config.supportedLanguages,{alias: p.language});
 			return {
 				id: p._id,
 				title: p.title,
-				language: (_.findWhere(config.supportedLanguages,{alias: p.language})).name
+				language: languageDetails ? languageDetails.name : '?' // just in case the db is inconsistent
 			};
 		});
 		return res.status(200).send({posts: posts});
