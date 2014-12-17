@@ -1,5 +1,13 @@
 'use strict';
-var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute']);
+var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute','ui.codemirror']);
+
+pastebinjsApp.value('ui.config', {
+	codemirror: {
+		mode: 'text/javascript',
+		lineNumbers: true,
+		matchBrackets: true
+	}
+});
 
 pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     var factory = {};

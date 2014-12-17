@@ -15,7 +15,7 @@
 		<h1>{{postData.title}} <small title="{{postData.createdAt}}">Posted {{postedTimeAgo}} ago</small></h1>
 	</div>
 	
-	POST HTML HERE
+	<textarea ui-codemirror ng-model="newPost.paste"></textarea>
 
 	<div class="text-right">
 		<a class="btn btn-default" href="/api/post/{{postId}}/download"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
