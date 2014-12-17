@@ -3,43 +3,35 @@
 Created by [Petro Podrezo](http://podrezo.com/). View project on [GitHub](https://github.com/podrezo/pastebinjs)
 
 ## About the project
-PasteBin.JS is a pastebin implementation in node.js. A pastebin is a group of websites that allows people to share snippets of code or text quickly and easily over the web. PasteBin.JS uses express/dot for the backend and bootstrap for the frontend.
+PasteBin.JS is a pastebin implementation in node.js. A pastebin is a type of website that allows people to share snippets of code or text quickly and easily over the web. The key features of pastebin.js are:
 
+* Elegant, modern UI written in Angular.JS with Bootstrap
+* Includes CodeMirror (code editor with syntax highlighting) allowing improved editing capabilities over most other pastebins
+* Fully documented REST API comes out of the box
+* Free & open source (MIT License)
+
+## Isn't that basically GitHub gists?
+Sort of, but with this project you can run your own 'gist' repository instead of relying on GitHub. In itself this is a potential advantage for privacy reasons, however PasteBin.JS also allows syntax highlighting as you're editing the code online which Gists doesn't do. Moreover, no account of any kind is required to use pastebin.js - just paste and go and it has an API which allows you to create posts via other means than just the web.
+
+## Configuration
+The configuration file is `config.js` in the root directory. It should be more or less self-explanatory but here's a quick rundown of the options:
+* `listenport` determines which TCP port the server will listen on. You can reverse proxy your Apache/NGINX installation to this port if you so choose.
+* `checkReferer` is a boolean which determines if the download and submit endpoints will require a matching referrer to work.
+* `refererRegex` is a regex for valid referrers. Ignored if `checkReferer` is set to false.
+* `maxRecentPosts` is the number of posts to show in 'recent posts'
+* `postRestrictions.titleLength` is the maximum number of characters in the title
+* `postRestrictions.pasteLength` is the maximum number of characters in the body
+* `supportedExpiryTimes` are the possible expiry times
+* `supportedLanguages` are all the languages supported by the pastebin. This is identical to what is in CodeMirror's `meta.js` file. You can comment out as needed, but if you introduce new options then make sure you have the corresponding modes installed in the `static/cmmodes` directory.
 
 ## Database
 The database settings are configurable in db.js. By default you will need a local instance of mongodb with no authentication. The application will use a collection called "pastebinjs"
 
-## Config.JSON
-The config looks like this:
-
-	{
-		"listenport" : 8000,
-		"checkReferer" : true,
-		"maxRecentPosts" : 10,
-		"postRestrictions" : {
-			"titleLength": 50,
-			"pasteLength" : 524288
-		},
-		"logFilePath" : "pastebin.log"
-	}
-
-The options are for the most part fairly self-explanatory but here's a brief explanation:
-
-* *listenport* specifies what TCP port express should listen on.
-* *checkReferer* validates the referrer for creating and downloading posts (to avoid hot-linking) if set to true. **Note:** you must update the regex in common.js for function isValidReferer() and set it to match your domain if you set this to true
-* *maxRecentPosts* specified the maximum number of recent posts to appear in the dropdown in the top navigation.
-* *postRestrictions* sets the limits and thresholds for post submissions.
-* *logFilePath* sets where to write the logs to. This can be undefined if you do not want a saved log (it will output to the console regardless)
-
 ## Running the Application
-Remember to run "npm install" to download all the dependencies before running the application.
-
-Simply run node and point it at **index.js** as the entry point - the database must be already running.
+Remember to run `npm install` to download all the dependencies before running the application, then run `npm start` to start it.
 
 # To-Do List
 
 There are a few features that I would like to add sometime in the future including:
 
-* Displaying line numbers when viewing a post
 * The ability to upload a post directly instead of pasting it (including drag and drop, ideally)
-* Periodically refreshing the 'recent posts' menu to purge expired posts from it
