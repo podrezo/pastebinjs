@@ -17,8 +17,7 @@
 		</div>
 		
 		<div class="page-header" ng-show="editMode">
-			<h1 ng-show="postId">Update Post</h1>
-			<h1 ng-hide="postId">New Post</h1>
+			<h1>New Post</h1>
 		</div>
 		
 		<div class="form-group" ng-show="editMode">
@@ -26,33 +25,59 @@
 			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-model="newPost.title">
 		</div>
 		
-		<textarea maxlength="{{config.postRestrictions.pasteLength}}" ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
+		<div class="form-group">
+			<label ng-show="editMode" class="control-label" for="inputPaste">Post Content (max. {{config.postRestrictions.pasteLength}} bytes)</label> 
+			<textarea id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
+		</div>
 		
-		<div class="form-group" ng-show="editMode">
-			<label class="control-label" for="inputLang">Source Language</label>
-			<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
-		</div>
+		<div class="row">
+			<div class="form-group col-md-4" ng-show="editMode">
+				<label class="control-label" for="inputLang">
+					Source Language
+				</label>
+				<div class="input-group">
+					<div class="input-group-addon"><span class="glyphicon glyphicon-file"></span></div>
+					<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
+				</div>
+			</div>
 
-		<div class="form-group" ng-show="editMode">
-			<label class="control-label" for="inputExpiry">Expiry Time</label>
-			<select class="form-control" id="inputExpiry" name="expiry" ng-model="newPost.expiry" ng-options="item.time as item.label for item in config.supportedExpiryTimes"></select>
-		</div>
+			<div class="form-group col-md-4" ng-show="editMode">
+				<label class="control-label" for="inputExpiry">
+					Expiry Time
+				</label>
+				<div class="input-group">
+					<div class="input-group-addon"><span class="glyphicon glyphicon-time"></span></div>
+					<select class="form-control" id="inputExpiry" name="expiry" ng-model="newPost.expiry" ng-options="item.time as item.label for item in config.supportedExpiryTimes"></select>
+				</div>
+			</div>
 
-		<div class="form-group" ng-show="editMode">
-			<div class="checkbox">
-				<label><input name="hidden" type="checkbox" ng-checked="{{newPost.hidden}}"> Hide this post from showing up in 'recent posts'</label>
+			<div class="form-group col-md-4" ng-show="editMode">
+				<label class="control-label" for="inputExpiry">
+					Visibility
+				</label>
+				<div class="input-group">
+					<div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+					<select class="form-control" id="inputExpiry" name="expiry" ng-model="newPost.visibility">
+						<option value="public">Public - Will appear in 'Recent Posts'</option>
+						<option value="private">Private - Will not appear in 'Recent Posts'</option>
+					</select>
+				</div>
 			</div>
 		</div>
-		
+
 		<!-- buttons row -->
 		<div class="text-right" style="margin: 1.5em 0 5em 0;">
-			<button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
-			<button type="button" class="btn btn-default btn-lg" ng-click="enterEditMode()" ng-hide="editMode">
-				<span class="glyphicon glyphicon-edit"></span> Update Post
+			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+				<span class="glyphicon glyphicon-trash"></span> Delete
 			</button>
-			<a class="btn btn-default btn-lg" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self" ng-hide="editMode"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
-			<button type="button" class="btn btn-primary btn-lg" ng-click="submitPost()" ng-disabled="isCurrentlyProcessing" ng-show="editMode">
-				<span class="glyphicon glyphicon-upload"></span> {{isCurrentlyProcessing ? 'Please wait...' : (postId ? 'Update' : 'Submit') }}
+			<button type="button" class="btn btn-default" ng-click="enterEditMode()" ng-hide="editMode">
+				<span class="glyphicon glyphicon-edit"></span> Update
+			</button>
+			<a class="btn btn-default" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self" ng-hide="editMode">
+				<span class="glyphicon glyphicon-download"></span> Download
+			</a>
+			<button type="button" class="btn btn-primary" ng-click="submitPost()" ng-disabled="isCurrentlyProcessing" ng-show="editMode">
+				<span class="glyphicon glyphicon-upload"></span> Create Post
 			</button>
 		</div>
 	</form>

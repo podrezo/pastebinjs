@@ -38,7 +38,14 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     };
 	factory.submitPost = function(postData) {
         var deferred = $q.defer();
-        $http({ method: 'POST', url: '/api/post', data: postData })
+		var requestData = {
+			language: postData.language,
+			expiry: postData.expiry,
+			hidden: postData.visibility === 'private',
+			paste: postData.paste,
+			title: postData.title
+		};
+        $http({ method: 'POST', url: '/api/post', data: requestData })
         .success(function(data, status, headers, config) {
             deferred.resolve(data);
         })
@@ -90,6 +97,12 @@ pastebinjsApp.factory('helperFactory', ['$q', 'angularLoad', function ($q, angul
     };
 	factory.loadLanguageMode = function(languageMode) {
 		var deferred = $q.defer();
+		// do not load null
+		if(languageMode === 'null') {
+			deferred.resolve();
+			return deferred.promise;
+		}
+		// load the script
         angularLoad.loadScript('/static/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
 			// Script loaded succesfully.
 			deferred.resolve();
@@ -121,6 +134,12 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	$scope.recentPosts = [];
 	dataFactory.getRecentPosts()
 	.then(function(recentPosts) {
+		recentPosts = _.map(recentPosts,function(post) {
+			if(!post.title) {
+				post.title = 'Untitled Post';
+			}
+			return(post);
+		});
 		$scope.recentPosts = recentPosts;
 	});
 })
@@ -153,6 +172,10 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		$scope.editorOptions.readOnly = 'nocursor';
 		dataFactory.getPost($scope.postId)
 		.then(function(postData) {
+			// set default post title
+			if(!postData.title) {
+				postData.title = 'Untitled Post';
+			}
 			$scope.postData = postData;
 			$scope.postedTimeAgo = helperFactory.getTimeSince(new Date(postData.expiry));
 			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
@@ -177,7 +200,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			$scope.newPost = {
 				language: postData.language,
 				expiry: postData.expiryValue,
-				hidden: postData.hidden,
+				visibility: postData.hidden ? 'private' : 'public',
 				paste: postData.paste,
 				title: postData.title
 			};
@@ -202,7 +225,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		$scope.newPost = {
 			language: 'Plain Text',
 			expiry: 0,
-			hidden: false,
+			visibility: 'public',
 			paste: '',
 			title: ''
 		};
