@@ -7,19 +7,13 @@
     "group": "Posts",
     "version": "1.0.0",
     "description": "<p>Deletes a post</p>",
-    "parameter": {
-      "fields": {
-        "Query String": [
-          {
-            "group": "Query String",
-            "type": "String",
-            "field": "field",
-            "optional": false,
-            "description": "<p>=password The password to delete the document</p>"
-          }
-        ]
+    "examples": [
+      {
+        "title": "Example Body",
+        "content": "{\n\"password\" : \"1234\",\n}\n",
+        "type": "JSON"
       }
-    },
+    ],
     "filename": "./controllers/api.js"
   },
   {
@@ -34,6 +28,25 @@
   },
   {
     "type": "get",
+    "url": "/api/config",
+    "title": "Retrieve pastebin configuration",
+    "name": "getConfig",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Gets a subset of the configuration to let the client know things  like the maximum number of characters in a post.</p>",
+    "success": {
+      "examples": [
+        {
+          "title": "Successful Response",
+          "content": "{\n  \"postRestrictions\" : {\n\t\"titleLength\": 50,\n\t\"pasteLength\" : 524288\n  }\n}\n",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./controllers/api.js"
+  },
+  {
+    "type": "get",
     "url": "/api/post/:postId",
     "title": "Retrieve Post",
     "name": "getPost",
@@ -44,7 +57,7 @@
       "examples": [
         {
           "title": "Successful Response",
-          "content": "{\n \"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\",\n \"title\" : \"Hello World Example\",\n \"language\" : \"csharp\",\n \"expiry\": null,\n \"hidden\": true\n}\n",
+          "content": "{\n \"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\",\n \"title\" : \"Hello World Example\",\n \"language\" : \"csharp\",\n \"expiry\": \"2014-12-28T01:43:25.101Z\",\n \"expiryValue\": 1440,\n \"createdAt\" : \"2014-12-27T01:43:25.101Z\",\n \"hidden\": true\n}\n",
           "type": "json"
         }
       ]
@@ -62,10 +75,19 @@
     "examples": [
       {
         "title": "Example Body",
-        "content": "{\n\"title\" : \"Hello World Example\",\n\"lang\": \"csharp\",\n\"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\"\n\"hidden\" : false,\n\"expiry\" : 3600\n}\n",
+        "content": "{\n\"title\" : \"Hello World Example\",\n\"language\": \"C#\",\n\"paste\" : \"Console.WriteLine(\\\"Hello World\\\");\"\n\"hidden\" : false,\n\"expiry\" : 3600\n}\n",
         "type": "JSON"
       }
     ],
+    "success": {
+      "examples": [
+        {
+          "title": "Successful Response",
+          "content": "{\n \"id\" : \"548da7e05b7c3d9c09abd416\",\n \"deletePassword\": \"1234\"\n}\n",
+          "type": "json"
+        }
+      ]
+    },
     "filename": "./controllers/api.js"
   },
   {
