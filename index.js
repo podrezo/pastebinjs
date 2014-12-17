@@ -18,6 +18,9 @@ app.get('/', function (req, res) {
 app.get('/p/:postId', function (req, res) {
 	res.sendFile(__dirname + '/static/index.html');
 });
+app.get('/about', function (req, res) {
+	res.sendFile(__dirname + '/static/index.html');
+});
 
 app.get('/api/config',
 	controllers.api.getConfig);

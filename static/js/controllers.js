@@ -118,6 +118,9 @@ pastebinjsApp.factory('helperFactory', ['$q', 'angularLoad', function ($q, angul
 pastebinjsApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
       $routeProvider
+		.when('/about', {
+			templateUrl: '/static/views/about.html'
+		})
 		.when('/p/:postId', {
 			templateUrl: '/static/views/post.html',
 			controller: 'PostController'
