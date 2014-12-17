@@ -33,12 +33,12 @@ define({ api: [
     "name": "getConfig",
     "group": "Posts",
     "version": "1.0.0",
-    "description": "<p>Gets a subset of the configuration to let the client know things  like the maximum number of characters in a post.</p>",
+    "description": "<p>Gets a subset of the configuration to let the client know things  like the maximum number of characters in a post, the supported expiry times, and the supported languages.</p>",
     "success": {
       "examples": [
         {
           "title": "Successful Response",
-          "content": "{\n  \"postRestrictions\" : {\n\t\"titleLength\": 50,\n\t\"pasteLength\" : 524288\n  }\n}\n",
+          "content": "{\n  \"postRestrictions\" : {\n\t\"titleLength\": 50,\n\t\"pasteLength\" : 524288\n  },\n  \"supportedExpiryTimes\" : [\n      { label: \"Never\", time: 0 },\n      { label: \"5 Minutes\", time: 5 },\n      ...\n  ],\n  \"supportedLanguages\" : [\n     {name: \"C#\", mime: \"text/x-csharp\", mode: \"clike\", ext: [\"cs\"], alias: [\"csharp\"]},\n     ...\n  ]\n}\n",
           "type": "json"
         }
       ]

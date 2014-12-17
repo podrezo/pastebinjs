@@ -13,14 +13,24 @@ var db = require('../db')
  *
  * @apiDescription
  *  Gets a subset of the configuration to let the client know things 
- *  like the maximum number of characters in a post.
+ *  like the maximum number of characters in a post, the supported
+ *  expiry times, and the supported languages.
  *
  * @apiSuccessExample {json} Successful Response
  * {
  *    "postRestrictions" : {
  * 		"titleLength": 50,
  * 		"pasteLength" : 524288
- *    }
+ *    },
+ *    "supportedExpiryTimes" : [
+ *        { label: "Never", time: 0 },
+ *        { label: "5 Minutes", time: 5 },
+ *        ...
+ *    ],
+ *    "supportedLanguages" : [
+ *       {name: "C#", mime: "text/x-csharp", mode: "clike", ext: ["cs"], alias: ["csharp"]},
+ *       ...
+ *    ]
  * } */
 exports.getConfig = function(req,res) {
 	return res.status(200).send({
