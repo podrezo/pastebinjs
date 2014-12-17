@@ -141,8 +141,16 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	// get values from querystring
 	$scope.deletePassword = $location.search().password;
 	$scope.finishedDeletingPost = $location.search().deleted;
+	// set up code editor box constants
+	$scope.editorOptions = {
+		lineWrapping : true,
+		lineNumbers: true,
+		matchBrackets: true
+	};
 	// if a post id is specified, load the post
 	if($scope.postId) {
+		$scope.editMode = false;
+		$scope.editorOptions.readOnly = 'nocursor';
 		dataFactory.getPost($scope.postId)
 		.then(function(postData) {
 			$scope.postData = postData;
@@ -154,13 +162,6 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			} else {
 				$scope.fileName = postData.title;
 			}
-			// codemirror settings
-			$scope.editorOptions = {
-				lineWrapping : true,
-				lineNumbers: true,
-				matchBrackets: true,
-				readOnly: 'nocursor'
-			};
 			if(languageDetails) {
 				helperFactory.loadLanguageMode(languageDetails.mode)
 				.then(function() {
@@ -197,8 +198,9 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	}
 	// set defaults
 	else {
+		$scope.editMode = true;
 		$scope.newPost = {
-			language: 'text',
+			language: 'Plain Text',
 			expiry: 0,
 			hidden: false,
 			paste: '',
@@ -216,5 +218,10 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			alert('error: '+err);
 			$scope.isCurrentlyProcessing = false;
 		});
+	}
+	// method for entering edit mode
+	$scope.enterEditMode = function() {
+		$scope.editMode = true;
+		$scope.editorOptions.readOnly = false;
 	}
 });

@@ -10,68 +10,72 @@
 	<button class="close" data-dismiss="alert" type="button">&times;</button> <strong><span class="glyphicon glyphicon-trash"></span> Post has been deleted!</strong>
 </div>
 
-<div id="postContent" ng-hide="!postId">
-	<div class="page-header">
-		<h1>{{postData.title}} <small title="{{postData.createdAt}}">{{postedTimeAgo}} ago</small></h1>
-	</div>
-	
-	<textarea ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
-
-	<div class="text-right">
-		<a class="btn btn-default" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
-	</div>
-	<hr style="margin: 1.5em 0 5em 0;">
-</div>
-
-<div class="well">
-	<h2>{{ postId ? 'Update' : 'New' }} Post</h2>
-
+<div id="postContent">
 	<form>
-		<div class="form-group">
+		<div class="page-header" ng-hide="editMode">
+			<h1>{{postData.title}} <small title="{{postData.createdAt}}">{{postedTimeAgo}} ago</small></h1>
+		</div>
+		
+		<div class="page-header" ng-show="editMode">
+			<h1 ng-show="postId">Update Post</h1>
+			<h1 ng-hide="postId">New Post</h1>
+		</div>
+		
+		<div class="form-group" ng-show="editMode">
 			<label class="control-label" for="inputTitle">Post Title ({{newPost.title.length}}/{{config.postRestrictions.titleLength}} characters)</label> 
 			<input autocomplete="off" class="form-control" id="inputTitle" maxlength="{{config.postRestrictions.titleLength}}" name="title" placeholder="Untitled Post" ng-model="newPost.title">
 		</div>
-
-		<div class="form-group">
-			<label class="control-label" for="inputPaste">Paste (max. {{config.postRestrictions.pasteLength}} bytes)</label> 
-			<textarea class="form-control" id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" name="paste" rows="15" style="font-family:monospace;" ng-model="newPost.paste"></textarea>
-		</div>
-
-		<div class="form-group">
+		
+		<textarea maxlength="{{config.postRestrictions.pasteLength}}" ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
+		
+		<div class="form-group" ng-show="editMode">
 			<label class="control-label" for="inputLang">Source Language</label>
 			<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" ng-show="editMode">
 			<label class="control-label" for="inputExpiry">Expiry Time</label>
 			<select class="form-control" id="inputExpiry" name="expiry" ng-model="newPost.expiry" ng-options="item.time as item.label for item in config.supportedExpiryTimes"></select>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group" ng-show="editMode">
 			<div class="checkbox">
 				<label><input name="hidden" type="checkbox" ng-checked="{{newPost.hidden}}"> Hide this post from showing up in 'recent posts'</label>
 			</div>
 		</div>
-
-		<div class="form-group text-right">
-			<button class="btn btn-primary btn-lg" ng-click="submitPost()" ng-disabled="isCurrentlyProcessing">
-				<span class="glyphicon glyphicon-upload"></span> {{isCurrentlyProcessing ? 'Please wait...' : 'Submit' }}
+		
+		<!-- buttons row -->
+		<div class="text-right" style="margin: 1.5em 0 5em 0;">
+			<button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#deleteModal"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
+			<button type="button" class="btn btn-default btn-lg" ng-click="enterEditMode()" ng-hide="editMode">
+				<span class="glyphicon glyphicon-edit"></span> Update Post
+			</button>
+			<a class="btn btn-default btn-lg" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self" ng-hide="editMode"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
+			<button type="button" class="btn btn-primary btn-lg" ng-click="submitPost()" ng-disabled="isCurrentlyProcessing" ng-show="editMode">
+				<span class="glyphicon glyphicon-upload"></span> {{isCurrentlyProcessing ? 'Please wait...' : (postId ? 'Update' : 'Submit') }}
 			</button>
 		</div>
 	</form>
 </div>
 
-<div class="well" ng-hide="!postId">
-	<h2>Delete Post</h2>
-
-	<form>
-		<div class="form-group">
+<!-- Modal Dialog for Delete Functionality -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="deleteModalLabel">Delete Post</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
 			<label for="inputPassword">Enter the password to delete the post</label>
-			<input class="form-control" id="inputPassword" name="deletepassword" ng-model="deletePassword" placeholder="This was provided when you created your post" type="text">
+			<input class="form-control" id="inputPassword" name="deletepassword" ng-value="deletePassword" placeholder="This was provided when you created your post" type="text">
 		</div>
-
-		<div class="text-right">
-			<button class="btn btn-danger btn-lg" ng-click="deletePost()"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
-		</div>
-	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">Close</button>
+		<button type="button" class="btn btn-danger btn-lg" ng-click="deletePost()"><span class="glyphicon glyphicon-trash"></span> Delete Post</button>
+      </div>
+    </div>
+  </div>
 </div>
