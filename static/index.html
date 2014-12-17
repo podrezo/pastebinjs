@@ -52,7 +52,7 @@
 							</a>
 							<ul class="dropdown-menu">
 								<li ng-repeat="post in recentPosts">
-									<a href="/p/{{post.id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
+									<a href="/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
 								</li>
 								<!--li class="divider"></li>
 								<li class="dropdown-header">Nav header</li-->
@@ -83,6 +83,7 @@
 	<!-- Angular.JS -->
 	<script src="/static/js/angular.min.js"></script>
 	<script src="/static/js/angular-route.min.js"></script>
+	<script src="/static/js/angular-load.min.js"></script>
 	<script src="/static/js/codemirror.js"></script>
 	<!-- CodeMirror Languages -->
 	<script src="/static/cmmode/javascript/javascript.js"></script>

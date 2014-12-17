@@ -1,5 +1,5 @@
 'use strict';
-var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute','ui.codemirror']);
+var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute','ui.codemirror','angularLoad']);
 
 pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     var factory = {};
@@ -61,7 +61,7 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     return factory;
 }]);
 
-pastebinjsApp.factory('helperFactory', [function () {
+pastebinjsApp.factory('helperFactory', ['$q', 'angularLoad', function ($q, angularLoad) {
     var factory = {};
     factory.getTimeSince = function(date) {
         var seconds = Math.floor((new Date() - date) / 1000);
@@ -87,6 +87,17 @@ pastebinjsApp.factory('helperFactory', [function () {
 			return interval + " minutes";
 		}
 		return Math.floor(seconds) + " seconds";
+    };
+	factory.loadLanguageMode = function(languageMode) {
+		var deferred = $q.defer();
+        angularLoad.loadScript('/static/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
+			// Script loaded succesfully.
+			deferred.resolve();
+		}).catch(function() {
+			// There was some error loading the script. Meh
+			deferred.reject();
+		});
+		return deferred.promise;
     };
     return factory;
 }]);
@@ -137,14 +148,25 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			$scope.postData = postData;
 			$scope.postedTimeAgo = helperFactory.getTimeSince(new Date(postData.expiry));
 			// codemirror settings
-			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
 			$scope.editorOptions = {
 				lineWrapping : true,
-				mode: languageDetails ? languageDetails.mode : 'clike', // fallback to C like if all else fails
 				lineNumbers: true,
 				matchBrackets: true,
 				readOnly: 'nocursor'
 			};
+			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
+			if(languageDetails) {
+				helperFactory.loadLanguageMode(languageDetails.mode)
+				.then(function() {
+					console.log("Loaded syntax file for mode " + languageDetails.mode);
+					// set the language mode for the code editor
+					$scope.editorOptions.mode = languageDetails.mode;
+				},
+				// failed to load syntax highlighting
+				function() {
+					console.log("Failed to load syntax highlighting file for mode " + languageDetails.mode);
+				});
+			}
 			$scope.newPost = {
 				language: postData.language,
 				expiry: postData.expiryValue,

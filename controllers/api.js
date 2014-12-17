@@ -116,7 +116,7 @@ exports.getPost = function(req, res) {
  * @apiExample {JSON} Example Body
  * {
  *  "title" : "Hello World Example",
- *  "language": "csharp",
+ *  "language": "C#",
  *  "paste" : "Console.WriteLine(\"Hello World\");"
  *  "hidden" : false,
  *  "expiry" : 3600
@@ -146,7 +146,7 @@ exports.submitPost = function(req,res) {
 	if (!_.isBoolean(req.body.hidden)) {
 		return res.status(400).send('Missing hidden property in body');
 	}
-	if (!_.findWhere(config.supportedLanguages, {alias: req.body.language})) {
+	if (!_.findWhere(config.supportedLanguages, {name: req.body.language})) {
 		return res.status(400).send('Invalid or unsupported language');
 	}
 	if (!_.isNumber(req.body.expiry)) {
