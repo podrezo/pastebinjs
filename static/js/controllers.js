@@ -102,14 +102,29 @@ pastebinjsApp.factory('helperFactory', ['$q', 'angularLoad', function ($q, angul
 			deferred.resolve();
 			return deferred.promise;
 		}
-		// load the script
-        angularLoad.loadScript('/static/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
-			// Script loaded succesfully.
-			deferred.resolve();
-		}).catch(function() {
-			// There was some error loading the script. Meh
-			deferred.reject();
-		});
+		
+		var loadScript = function() {
+			// load the script
+			angularLoad.loadScript('/static/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
+				// Script loaded succesfully.
+				deferred.resolve();
+			}).catch(function() {
+				// There was some error loading the script. Meh
+				deferred.reject();
+			});
+		};
+		
+		// if language is htmlmixed, a special case, then we load additional modes first
+		if(languageMode === 'htmlmixed') {
+			factory.loadLanguageMode('xml')
+			.then(factory.loadLanguageMode('javascript'))
+			.then(factory.loadLanguageMode('css'))
+			.then(loadScript);
+		}
+		// otherwise just load the script
+		else {
+			loadScript();
+		}
 		return deferred.promise;
     };
     return factory;

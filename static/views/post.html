@@ -27,7 +27,7 @@
 		
 		<div class="form-group">
 			<label ng-show="editMode" class="control-label" for="inputPaste">Post Content (max. {{config.postRestrictions.pasteLength}} bytes)</label> 
-			<textarea id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
+			<textarea id="inputPaste" maxlength="{{config.postRestrictions.pasteLength}}" ui-codemirror ui-codemirror-opts="editorOptions" ng-model="newPost.paste"></textarea>
 		</div>
 		
 		<div class="row">
