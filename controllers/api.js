@@ -250,7 +250,14 @@ exports.downloadPost = function (req, res) {
 	db.Post.findOne({
 		_id : req.params.postId
 	}, function (err, post) {
-		res.setHeader("content-disposition","attachment; filename=" + (post.title == null ? post.language : post.title+"_"+post.language ) +".txt");
+		var languageDetails = _.findWhere(config.supportedLanguages,{name:post.language});
+		var fileName;
+		if(languageDetails.ext) {
+			fileName = post.title + '.' + languageDetails.ext[0];
+		} else {
+			fileName = post.title;
+		}
+		res.setHeader("content-disposition","attachment; filename=" + fileName);
 		res.setHeader("content-type","application/octet-stream");
 		res.status(200).send(post.paste);
 	});

@@ -18,7 +18,7 @@
 	<textarea ui-codemirror ui-codemirror-opts="editorOptions" ng-model="postData.paste"></textarea>
 
 	<div class="text-right">
-		<a class="btn btn-default" href="/api/post/{{postId}}/download"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
+		<a class="btn btn-default" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
 	</div>
 	<hr style="margin: 1.5em 0 5em 0;">
 </div>

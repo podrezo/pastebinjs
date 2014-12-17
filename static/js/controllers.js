@@ -147,6 +147,13 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		.then(function(postData) {
 			$scope.postData = postData;
 			$scope.postedTimeAgo = helperFactory.getTimeSince(new Date(postData.expiry));
+			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
+			// set filename for download purposes
+			if(languageDetails.ext) {
+				$scope.fileName = postData.title + '.' + languageDetails.ext[0];
+			} else {
+				$scope.fileName = postData.title;
+			}
 			// codemirror settings
 			$scope.editorOptions = {
 				lineWrapping : true,
@@ -154,7 +161,6 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 				matchBrackets: true,
 				readOnly: 'nocursor'
 			};
-			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
 			if(languageDetails) {
 				helperFactory.loadLanguageMode(languageDetails.mode)
 				.then(function() {
