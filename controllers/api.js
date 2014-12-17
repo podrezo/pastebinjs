@@ -56,15 +56,6 @@ exports.getRecentPosts = function(req,res) {
 			logger.warn("Error while getting recent posts: " + err.toString());
 			return res.status(500).send('Failed to retrieve posts from database');
 		}
-		// transform the list to show language name instead of the shorthand
-		posts = _.map(posts,function(p) {
-			var languageDetails = _.findWhere(config.supportedLanguages,{alias: p.language});
-			return {
-				id: p._id,
-				title: p.title,
-				language: languageDetails ? languageDetails.name : '?' // just in case the db is inconsistent
-			};
-		});
 		return res.status(200).send({posts: posts});
 	});
 	

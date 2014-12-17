@@ -12,10 +12,10 @@
 
 <div id="postContent" ng-hide="!postId">
 	<div class="page-header">
-		<h1>{{postData.title}} <small title="{{postData.createdAt}}">Posted {{postedTimeAgo}} ago</small></h1>
+		<h1>{{postData.title}} <small title="{{postData.createdAt}}">{{postedTimeAgo}} ago</small></h1>
 	</div>
 	
-	<textarea ui-codemirror ng-model="newPost.paste"></textarea>
+	<textarea ui-codemirror ui-codemirror-opts="editorOptions" ng-model="newPost.paste"></textarea>
 
 	<div class="text-right">
 		<a class="btn btn-default" href="/api/post/{{postId}}/download"><span class="glyphicon glyphicon-download"></span> Download this paste</a>
@@ -39,7 +39,7 @@
 
 		<div class="form-group">
 			<label class="control-label" for="inputLang">Source Language</label>
-			<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.alias as item.name for item in config.supportedLanguages"></select>
+			<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
 		</div>
 
 		<div class="form-group">

@@ -1,14 +1,6 @@
 'use strict';
 var pastebinjsApp = angular.module('pastebinjsApp', ['ngRoute','ui.codemirror']);
 
-pastebinjsApp.value('ui.config', {
-	codemirror: {
-		mode: 'text/javascript',
-		lineNumbers: true,
-		matchBrackets: true
-	}
-});
-
 pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     var factory = {};
     factory.getRecentPosts = function() {
@@ -144,6 +136,15 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		.then(function(postData) {
 			$scope.postData = postData;
 			$scope.postedTimeAgo = helperFactory.getTimeSince(new Date(postData.expiry));
+			// codemirror settings
+			var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:postData.language});
+			$scope.editorOptions = {
+				lineWrapping : true,
+				mode: languageDetails ? languageDetails.mode : 'clike', // fallback to C like if all else fails
+				lineNumbers: true,
+				matchBrackets: true,
+				readOnly: 'nocursor'
+			};
 			$scope.newPost = {
 				language: postData.language,
 				expiry: postData.expiryValue,
