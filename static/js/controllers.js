@@ -195,6 +195,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 				// failed to load syntax highlighting
 				function() {
 					console.log("Failed to load syntax highlighting file for mode " + languageDetails.mode);
+					$scope.editorOptions.mode = 'null';
 				});
 			}
 			$scope.newPost = {
@@ -246,5 +247,20 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	$scope.enterEditMode = function() {
 		$scope.editMode = true;
 		$scope.editorOptions.readOnly = false;
+	}
+	// method for handling changes to the selected language
+	$scope.handleSelectedLanguageChanged = function() {
+		var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:$scope.newPost.language});
+		helperFactory.loadLanguageMode(languageDetails.mode)
+		.then(function() {
+			console.log("Loaded syntax file for mode " + languageDetails.mode);
+			// set the language mode for the code editor
+			$scope.editorOptions.mode = languageDetails.mode;
+		},
+		// failed to load syntax highlighting
+		function() {
+			console.log("Failed to load syntax highlighting file for mode " + languageDetails.mode);
+			$scope.editorOptions.mode = 'null';
+		});
 	}
 });

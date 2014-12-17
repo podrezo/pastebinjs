@@ -37,7 +37,8 @@
 				</label>
 				<div class="input-group">
 					<div class="input-group-addon"><span class="glyphicon glyphicon-file"></span></div>
-					<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
+					<select class="form-control" id="inputLang" name="lang" ng-model="newPost.language"
+					  ng-change="handleSelectedLanguageChanged()" ng-options="item.name as item.name for item in config.supportedLanguages"></select>
 				</div>
 			</div>
 
