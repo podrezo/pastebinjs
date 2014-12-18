@@ -259,3 +259,20 @@ exports.downloadPost = function (req, res) {
 		res.status(200).send(post.paste);
 	});
 };
+
+/**
+ * @api {get} /api/post/:postId/raw Send post as raw text
+ * @apiName rawPost
+ * @apiGroup Posts
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription
+ *  Sends the post content as raw plain-text */
+exports.rawPost = function (req, res) {
+	db.Post.findOne({
+		_id : req.params.postId
+	}, function (err, post) {
+		res.setHeader('content-type','text/plain');
+		res.status(200).send(post.paste);
+	});
+};

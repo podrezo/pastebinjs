@@ -35,6 +35,8 @@ app.get('/api/post/:postId',
 	controllers.api.getPost);
 app.get('/api/post/:postId/download',
 	controllers.api.downloadPost);
+app.get('/api/post/:postId/raw',
+	controllers.api.rawPost);
 app.post('/api/post',
 	controllers.api.submitPost);
 app.delete('/api/post/:postId',

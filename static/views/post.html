@@ -71,6 +71,9 @@
 			<button type="button" class="btn btn-default" ng-click="enterEditMode()" ng-hide="editMode">
 				<span class="glyphicon glyphicon-edit"></span> Update
 			</button>
+			<a class="btn btn-default" href="/api/post/{{postId}}/raw" target="_self" ng-hide="editMode">
+				<span class="glyphicon glyphicon-file"></span> Raw Text
+			</a>
 			<a class="btn btn-default" href="/api/post/{{postId}}/download" download="{{fileName}}" target="_self" ng-hide="editMode">
 				<span class="glyphicon glyphicon-download"></span> Download
 			</a>
