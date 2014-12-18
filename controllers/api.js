@@ -193,7 +193,7 @@ exports.submitPost = function(req,res) {
 			logger.warn('Error while saving post: ' + err.toString());
 			return res.status(500).send('Failed to save post to database');
 		}
-		logger.info('New post from ' + post.ip + ' "' + (post.title || 'Untitled Post') + '" (ID:' + post._id + ', ' + (post.hidden ? 'private' : 'public' ) + ')');
+		logger.info('New ' + (post.hidden ? 'private' : 'public' ) + ' post from ' + post.ip + ' "' + (post.title || 'Untitled Post') + '" (ID:' + post._id + ')');
 		return res.status(200).json({ id: post._id, deletePassword: newPost.deletepassword });
 	});
 };
