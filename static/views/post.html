@@ -65,7 +65,7 @@
 
 		<!-- buttons row -->
 		<div class="text-right" style="margin: 1.5em 0 5em 0;">
-			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+			<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" ng-hide="editMode">
 				<span class="glyphicon glyphicon-trash"></span> Delete
 			</button>
 			<button type="button" class="btn btn-default" ng-click="enterEditMode()" ng-hide="editMode">
