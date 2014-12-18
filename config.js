@@ -1,3 +1,4 @@
+'use strict';
 module.exports = {
 	listenport : 8000,
 	trustProxy: true,

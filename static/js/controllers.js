@@ -56,7 +56,7 @@ pastebinjsApp.factory('dataFactory', ['$http', '$q', function ($http, $q) {
     };
 	factory.deletePost = function(postId, password) {
         var deferred = $q.defer();
-        $http({ method: 'DELETE', url: '/api/post/' + postId, headers: { "Content-Type" : "application/json" }, data: { password: password } })
+        $http({ method: 'DELETE', url: '/api/post/' + postId, headers: { 'Content-Type' : 'application/json' }, data: { password: password } })
         .success(function(data, status, headers, config) {
             deferred.resolve();
         })
@@ -75,25 +75,25 @@ pastebinjsApp.factory('helperFactory', ['$q', 'angularLoad', function ($q, angul
 		var interval = Math.floor(seconds / 31536000);
 
 		if (interval > 1) {
-			return interval + " years";
+			return interval + ' years';
 		}
 		interval = Math.floor(seconds / 2592000);
 		if (interval > 1) {
-			return interval + " months";
+			return interval + ' months';
 		}
 		interval = Math.floor(seconds / 86400);
 		if (interval > 1) {
-			return interval + " days";
+			return interval + ' days';
 		}
 		interval = Math.floor(seconds / 3600);
 		if (interval > 1) {
-			return interval + " hours";
+			return interval + ' hours';
 		}
 		interval = Math.floor(seconds / 60);
 		if (interval > 1) {
-			return interval + " minutes";
+			return interval + ' minutes';
 		}
-		return Math.floor(seconds) + " seconds";
+		return Math.floor(seconds) + ' seconds';
     };
 	factory.loadLanguageMode = function(languageMode) {
 		var deferred = $q.defer();
@@ -206,13 +206,13 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			if(languageDetails) {
 				helperFactory.loadLanguageMode(languageDetails.mode)
 				.then(function() {
-					console.log("Loaded syntax file for mode " + languageDetails.mode);
+					console.log('Loaded syntax file for mode ' + languageDetails.mode);
 					// set the language mode for the code editor
 					$scope.editorOptions.mode = languageDetails.mode;
 				},
 				// failed to load syntax highlighting
 				function() {
-					console.log("Failed to load syntax highlighting file for mode " + languageDetails.mode);
+					console.log('Failed to load syntax highlighting file for mode ' + languageDetails.mode);
 					$scope.editorOptions.mode = 'null';
 				});
 			}
@@ -230,7 +230,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			dataFactory.deletePost($scope.postId,$scope.deletePassword)
 			.then(function(postData) {
 				$location.$$search = {}; // reset the potential 'deletepassword' query string parameter leftover
-				$location.path( "/" ).search('deleted',true);
+				$location.path( '/' ).search('deleted',true);
 			},
 			function(err) {
 				alert('error: '+err);
@@ -254,7 +254,7 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		$scope.isCurrentlyProcessing = true;
 		dataFactory.submitPost($scope.newPost)
 		.then(function(postData) {
-			$location.path( "/p/" + postData.id ).search('password',postData.deletePassword);
+			$location.path( '/p/' + postData.id ).search('password',postData.deletePassword);
 		},
 		function(err) {
 			alert('error: '+err);
@@ -271,13 +271,13 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		var languageDetails = _.findWhere($scope.config.supportedLanguages,{name:$scope.newPost.language});
 		helperFactory.loadLanguageMode(languageDetails.mode)
 		.then(function() {
-			console.log("Loaded syntax file for mode " + languageDetails.mode);
+			console.log('Loaded syntax file for mode ' + languageDetails.mode);
 			// set the language mode for the code editor
 			$scope.editorOptions.mode = languageDetails.mode;
 		},
 		// failed to load syntax highlighting
 		function() {
-			console.log("Failed to load syntax highlighting file for mode " + languageDetails.mode);
+			console.log('Failed to load syntax highlighting file for mode ' + languageDetails.mode);
 			$scope.editorOptions.mode = 'null';
 		});
 	}

@@ -63,7 +63,7 @@ exports.getRecentPosts = function(req,res) {
 	var query = db.Post.find({ hidden: false }, 'title language _id', {limit: 10, sort: {'_id': -1}});
 	query.exec(function(err, posts) {
 		if (err) {
-			logger.warn("Error while getting recent posts: " + err.toString());
+			logger.warn('Error while getting recent posts: ' + err.toString());
 			return res.status(500).send('Failed to retrieve posts from database');
 		}
 		return res.status(200).send({posts: posts});
@@ -95,7 +95,7 @@ exports.getPost = function(req, res) {
 		_id : req.params.postId
 	}, function (err, post) {
 		if (err) {
-			logger.warn("Error while getting post: " + err.toString());
+			logger.warn('Error while getting post: ' + err.toString());
 			return res.status(500).send('Failed to retrieve post from database');
 		}
 		if (post) {
@@ -188,7 +188,7 @@ exports.submitPost = function(req,res) {
 			paste : req.body.paste,
 			title : title,
 			language : req.body.language,
-			ip : common.getRemoteIp(req),
+			ip : req.ip,
 			hidden : req.body.hidden,
 			expiryValue: req.body.expiry,
 			expiry: expiryTime,
@@ -223,7 +223,7 @@ exports.deletePost = function(req, res) {
 		_id : req.params.postId
 	}, function (err, post) {
 		if (err) {
-			logger.warn("Error while getting post: " + err.toString());
+			logger.warn('Error while getting post: ' + err.toString());
 			return res.status(500).send('Failed to retrieve post from database');
 		}
 		if (post == null) {
@@ -234,7 +234,7 @@ exports.deletePost = function(req, res) {
 		}
 		post.remove(function(err) {
 			if (err) {
-				logger.warn("Error while deleting post: " + err.toString());
+				logger.warn('Error while deleting post: ' + err.toString());
 				return res.status(500).send('Failed to delete post from database');
 			}
 			res.status(200).end();
@@ -254,7 +254,7 @@ exports.downloadPost = function (req, res) {
 	// check referrer, if required
 	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
 		logger.warn('Blocked direct download via referral \''+req.headers.referer+'\'');
-		res.redirect("/");
+		res.redirect('/');
 		return;
 	}
 	db.Post.findOne({
@@ -267,8 +267,8 @@ exports.downloadPost = function (req, res) {
 		} else {
 			fileName = post.title;
 		}
-		res.setHeader("content-disposition","attachment; filename=" + fileName);
-		res.setHeader("content-type","application/octet-stream");
+		res.setHeader('content-disposition','attachment; filename=' + fileName);
+		res.setHeader('content-type','application/octet-stream');
 		res.status(200).send(post.paste);
 	});
 };

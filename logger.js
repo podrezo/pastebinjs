@@ -1,3 +1,4 @@
+'use strict';
 var dateFormat = require('dateformat')
   , winston = require('winston')
   , config = require('./config');
