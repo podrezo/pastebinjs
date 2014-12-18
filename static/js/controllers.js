@@ -191,7 +191,8 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 	$scope.editorOptions = {
 		lineWrapping : true,
 		lineNumbers: true,
-		matchBrackets: true
+		matchBrackets: true,
+		theme: 'neat'
 	};
 	// if a post id is specified, load the post
 	if($scope.postId) {
