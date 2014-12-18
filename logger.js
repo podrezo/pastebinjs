@@ -3,7 +3,7 @@ var dateFormat = require('dateformat')
   , config = require('./config');
 
 var transports;
-if(typeof(config.logFilePath) !== 'undefined') {
+if(config.logFilePath) {
 	transports = [
       new (winston.transports.Console)({ colorize: true })
       , new (winston.transports.File)({ filename: config.logFilePath, timestamp:function() { return dateFormat(); }, handleExceptions: true, json: false })

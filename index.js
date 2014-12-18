@@ -8,6 +8,9 @@ var config = require('./config')
   , bodyParser = require('body-parser');
 
 // Configure Express.JS
+if(config.trustProxy) {
+	app.enable('trust proxy');
+}
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/static', express.static(__dirname + '/static'));

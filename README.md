@@ -16,8 +16,10 @@ Sort of, but with this project you can run your own 'gist' repository instead of
 ## Configuration
 The configuration file is `config.js` in the root directory. It should be more or less self-explanatory but here's a quick rundown of the options:
 * `listenport` determines which TCP port the server will listen on. You can reverse proxy your Apache/NGINX installation to this port if you so choose.
+* `logFilePath` determines the name of the file to log to (optional)
+* `trustProxy` this enables express's 'trust proxy' mode which [you can read about here](http://expressjs.com/guide/behind-proxies.html). The short of it is, if you're using the application behind a reverse proxy like NGINX or apache, set this to `true` or else you're going to see your proxy's IP in the logs instead of the client's.
 * `checkReferer` is a boolean which determines if the download and submit endpoints will require a matching referrer to work.
-* `refererRegex` is a regex for valid referrers. Ignored if `checkReferer` is set to false.
+* `refererRegex` is a regex for valid referrers. Ignored if `checkReferer` is set to false. localhost access is *always* allowed regardless.
 * `maxRecentPosts` is the number of posts to show in 'recent posts'
 * `postRestrictions.titleLength` is the maximum number of characters in the title
 * `postRestrictions.pasteLength` is the maximum number of characters in the body
