@@ -11,7 +11,6 @@ var config = require('./config')
 if(config.trustProxy) {
 	app.enable('trust proxy');
 }
-app.use(middleware.appsecret);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/static', express.static(__dirname + '/static'));
@@ -26,6 +25,8 @@ app.get('/about', function (req, res) {
 	res.sendFile(__dirname + '/static/index.html');
 });
 
+/* API endpoints */
+app.use('/api',middleware.appsecret);
 app.get('/api/config',
 	controllers.api.getConfig);
 app.get('/api/recent',
