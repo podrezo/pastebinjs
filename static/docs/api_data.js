@@ -65,6 +65,16 @@ define({ api: [
     "filename": "./controllers/api.js"
   },
   {
+    "type": "get",
+    "url": "/api/post/:postId/raw",
+    "title": "Send post as raw text",
+    "name": "rawPost",
+    "group": "Posts",
+    "version": "1.0.0",
+    "description": "<p>Sends the post content as raw plain-text</p>",
+    "filename": "./controllers/api.js"
+  },
+  {
     "type": "post",
     "url": "/api/post",
     "title": "Create Post",
