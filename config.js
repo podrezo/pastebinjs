@@ -7,7 +7,7 @@ module.exports = {
 		// { app_id: 'myapp', app_secret: '42' } // this is just an example, obviously do not use it
 	],
 	refererRegex : /^http(s)?:\/\/(www\.)?yourdomain.com.*/i,
-	maxRecentPosts : 10,
+	maxRecentPosts : 5,
 	postRestrictions : {
 		titleLength: 50,
 		pasteLength : 524288

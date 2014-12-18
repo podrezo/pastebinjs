@@ -160,6 +160,15 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		});
 		$scope.recentPosts = recentPosts;
 	});
+	// my posts are the client's own recorded posts via HTML5 localStorage
+	$scope.myPosts = [];
+	if(localStorage)
+	{
+		var postsString = localStorage.getItem('posts');
+		if(postsString) {
+			$scope.myPosts = JSON.parse(postsString);
+		}
+	}
 })
 .controller('MainController', function($scope, $route, $routeParams, $location, $http, dataFactory) {
 	$scope.recentPosts = [];
@@ -229,7 +238,19 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 			$scope.isCurrentlyProcessing = true;
 			dataFactory.deletePost($scope.postId,$scope.deletePassword)
 			.then(function(postData) {
-				$location.$$search = {}; // reset the potential 'deletepassword' query string parameter leftover
+				// update localStorage if available to save record of this post for the user
+				if(localStorage) {
+					var myPostsString = localStorage.getItem('posts');
+					var myPosts = [];
+					if(myPostsString) {
+						myPosts = JSON.parse(myPostsString);
+					}
+					myPosts = _.filter(myPosts,function(post) {
+						return post._id !== $scope.postId;
+					});
+					localStorage.setItem('posts', JSON.stringify(myPosts));
+				}
+				$location.$$search = {}; // reset any potential previous query string parameters
 				$location.path( '/' ).search('deleted',true);
 			},
 			function(err) {
@@ -254,6 +275,23 @@ pastebinjsApp.config(['$routeProvider', '$locationProvider',
 		$scope.isCurrentlyProcessing = true;
 		dataFactory.submitPost($scope.newPost)
 		.then(function(postData) {
+			// update localStorage if available to save record of this post for the user
+			if(localStorage) {
+				var myPostsString = localStorage.getItem('posts');
+				var myPosts = [];
+				if(myPostsString) {
+					myPosts = JSON.parse(myPostsString);
+				}
+				myPosts.push({
+					_id: postData.id,
+					language: $scope.newPost.language,
+					title: $scope.newPost.title,
+					deletePassword: postData.deletePassword
+				});
+				localStorage.setItem('posts', JSON.stringify(myPosts));
+			}
+			// redirect to the post itself
+			$location.$$search = {}; // reset any potential previous query string parameters
 			$location.path( '/p/' + postData.id ).search('password',postData.deletePassword);
 		},
 		function(err) {
