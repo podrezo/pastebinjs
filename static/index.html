@@ -35,57 +35,52 @@
 </head>
 
 <body ng-controller="MainController">
-	<!-- Wrap all page content here -->
-
-	<div id="wrap">
-		<!-- Fixed navbar -->
-
-		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-			<div class="container">
-				<div class="navbar-header">
-					<button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
-						<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="/">pastebin.js</a>
-				</div>
-
-				<div class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="/"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> New Post</a>
-						</li>
-
-						<li class="dropdown" ng-controller="RecentPostsController">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-								<span class="glyphicon glyphicon-list" aria-hidden="true"></span> Recent Posts <b class="caret"></b>
-							</a>
-							<ul class="dropdown-menu">
-								<li ng-repeat="post in recentPosts">
-									<a href="/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
-								</li>
-								<li class="divider" ng-show="myPosts && myPosts.length > 0"></li>
-								<li class="dropdown-header" ng-show="myPosts && myPosts.length > 0">Your Posts</li>
-								<li ng-repeat="post in myPosts">
-									<a href="/p/{{post._id}}?password={{post.deletePassword}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
-								</li>
-							</ul>
-						</li>
-						
-						<li>
-							<a href="/static/docs" target="_self"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> API</a>
-						</li>
-						
-						<li>
-							<a href="/about"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About</a>
-						</li>
-					</ul>
-				</div><!--/.nav-collapse -->
+	<!-- Fixed navbar -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse" type="button">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">pastebin.js</a>
 			</div>
-		</div><!-- BODY -->
 
-		<div class="container" ng-view>
-			<!-- Template Goes Here -->
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="/"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> New Post</a>
+					</li>
+
+					<li class="dropdown" ng-controller="RecentPostsController">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<span class="glyphicon glyphicon-list" aria-hidden="true"></span> Recent Posts <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li ng-repeat="post in recentPosts">
+								<a href="/p/{{post._id}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
+							</li>
+							<li class="divider" ng-show="myPosts && myPosts.length > 0"></li>
+							<li class="dropdown-header" ng-show="myPosts && myPosts.length > 0">Your Posts</li>
+							<li ng-repeat="post in myPosts">
+								<a href="/p/{{post._id}}?password={{post.deletePassword}}">{{post.title}} <span class="label label-primary">{{post.language}}</span></a>
+							</li>
+						</ul>
+					</li>
+					
+					<li>
+						<a href="/static/docs" target="_self"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span> API</a>
+					</li>
+					
+					<li>
+						<a href="/about"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> About</a>
+					</li>
+				</ul>
+			</div><!--/.nav-collapse -->
 		</div>
+	</nav><!-- BODY -->
+
+	<div class="container" ng-view>
+		<!-- Template Goes Here -->
 	</div>
 
 	<footer class="footer">
@@ -93,7 +88,7 @@
 			<p class="text-muted credit">Powered by <a href="https://github.com/podrezo/pastebinjs">pastebin.js</a>, created by <a href="http://podrezo.com/">Petro Podrezo</a>. 
 			Big thanks to the folks at <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="http://www.angularjs.org/" target="_blank">Angular.JS</a>, and <a href="http://codemirror.net/" target="_blank">CodeMirror</a> for their amazing work that made this project possible.</p>
 		</div>
-	</div>
+	</footer>
 	<!-- JavaScript
 	==================================================
 	-->
