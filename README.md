@@ -37,5 +37,4 @@ Remember to run `npm install` to download all the dependencies before running th
 There are a few features that I would like to add sometime in the future including:
 
 * The ability to upload a post directly instead of pasting it (including drag and drop, ideally)
-* Use HTML5 localStorage to store delete passwords and posts created on the client side, for quick history
 * Do something with the expiry timer - currently it is not really used for anything; should clear out expired posts
