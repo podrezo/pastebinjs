@@ -18,8 +18,8 @@ The configuration file is `config.js` in the root directory. It should be more o
 * `listenport` determines which TCP port the server will listen on. You can reverse proxy your Apache/NGINX installation to this port if you so choose.
 * `logFilePath` determines the name of the file to log to (optional)
 * `trustProxy` this enables express's 'trust proxy' mode which [you can read about here](http://expressjs.com/guide/behind-proxies.html). The short of it is, if you're using the application behind a reverse proxy like NGINX or apache, set this to `true` or else you're going to see your proxy's IP in the logs instead of the client's.
-* `checkReferer` is a boolean which determines if the download and submit endpoints will require a matching referrer to work.
-* `refererRegex` is a regex for valid referrers. Ignored if `checkReferer` is set to false. localhost access is *always* allowed regardless.
+* `refererRegex` is a regex for valid referrers. localhost is always allowed as a valid referer. You must set this to the expected referer value that will be sent by clients because otherwise the API will be restricted to avoid [CSRF](http://en.wikipedia.org/wiki/Cross-site_request_forgery) and similar malicious behavior. Any referer that doesn't match this regex will not be allowed access to the API and so not adding all variations of your expected possible referers will effectively make the site not work **unless you set up...**
+* `apiAccessControlList` which is an array of app_id and app_secret pairs (which are both strings). This allows the use of the API even without a referer header by specifying a header of the format `Authorization: OAuth app_id="myapp",app_secret="42"` where the values exactly match an entry in this array. Please note that **this will only help against other websites trying to use your API** - any application that allows the developer to control the referer header will inevitably make it possible to forge the header and allow access without valid API credentials. This is an ongoing issue that has not yet been solved.
 * `maxRecentPosts` is the number of posts to show in 'recent posts'
 * `postRestrictions.titleLength` is the maximum number of characters in the title
 * `postRestrictions.pasteLength` is the maximum number of characters in the body
@@ -37,6 +37,5 @@ Remember to run `npm install` to download all the dependencies before running th
 There are a few features that I would like to add sometime in the future including:
 
 * The ability to upload a post directly instead of pasting it (including drag and drop, ideally)
-* Improve logging (e.g. what is logged, configure where it is stored, etc)
 * Use HTML5 localStorage to store delete passwords and posts created on the client side, for quick history
 * Do something with the expiry timer - currently it is not really used for anything; should clear out expired posts

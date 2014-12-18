@@ -1,7 +1,7 @@
 'use strict';
 var config = require('./config')
-  , common = require('./common')
   , controllers = require('./controllers')
+  , middleware = require('./middleware')
   , logger = require('./logger').logger
   , express = require('express')
   , app = express()
@@ -11,6 +11,7 @@ var config = require('./config')
 if(config.trustProxy) {
 	app.enable('trust proxy');
 }
+app.use(middleware.appsecret);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/static', express.static(__dirname + '/static'));

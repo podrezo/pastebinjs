@@ -3,7 +3,9 @@ module.exports = {
 	listenport : 8000,
 	trustProxy: true,
 	//'logFilePath' : '/var/log/pastebinjs.log',
-	checkReferer : false,
+	apiAccessControlList: [
+		// { app_id: 'myapp', app_secret: '42' } // this is just an example, obviously do not use it
+	],
 	refererRegex : /^http(s)?:\/\/(www\.)?yourdomain.com.*/i,
 	maxRecentPosts : 10,
 	postRestrictions : {

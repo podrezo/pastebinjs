@@ -2,8 +2,7 @@
 var db = require('../db')
   , _ = require('underscore')
   , config = require('../config')
-  , logger = require('../logger').logger
-  , common = require('../common');
+  , logger = require('../logger').logger;
 
 /**
  * @api {get} /api/config Retrieve pastebin configuration
@@ -137,12 +136,6 @@ exports.getPost = function(req, res) {
  *   "deletePassword": "1234"
  * } */
 exports.submitPost = function(req,res) {
-	// check referrer, if required
-	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
-		logger.warn('Blocked direct submit via referral \''+req.headers.referer+'\'');
-		return res.status(403).send('Request not allowed due to referer mismatch');
-	}
-	
 	// validate inputs
 	if (_.keys(req.body).length === 0) {
 		return res.status(400).send('Missing body in request');
@@ -200,7 +193,7 @@ exports.submitPost = function(req,res) {
 			logger.warn('Error while saving post: ' + err.toString());
 			return res.status(500).send('Failed to save post to database');
 		}
-		logger.info('new post from ' + post.ip + ' (lang:' + post.language + ' / id:' + post._id + ')');
+		logger.info('New post from ' + post.ip + ' "' + (post.title || 'Untitled Post') + '" (ID:' + post._id + ', ' + (post.hidden ? 'private' : 'public' ) + ')');
 		return res.status(200).json({ id: post._id, deletePassword: newPost.deletepassword });
 	});
 };
@@ -251,12 +244,6 @@ exports.deletePost = function(req, res) {
  * @apiDescription
  *  Sends the post content as a file download */
 exports.downloadPost = function (req, res) {
-	// check referrer, if required
-	if (config.checkReferer && !common.isValidReferer(req.headers.referer)) {
-		logger.warn('Blocked direct download via referral \''+req.headers.referer+'\'');
-		res.redirect('/');
-		return;
-	}
 	db.Post.findOne({
 		_id : req.params.postId
 	}, function (err, post) {
