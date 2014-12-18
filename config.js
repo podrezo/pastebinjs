@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	listenport : 8000,
-	trustProxy: true,
+	trustProxy: 'loopback',
 	//'logFilePath' : '/var/log/pastebinjs.log',
 	apiAccessControlList: [
 		// { app_id: 'myapp', app_secret: '42' } // this is just an example, obviously do not use it

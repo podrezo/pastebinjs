@@ -9,7 +9,7 @@ var config = require('./config')
 
 // Configure Express.JS
 if(config.trustProxy) {
-	app.enable('trust proxy');
+	app.set('trust proxy', config.trustProxy);
 }
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
