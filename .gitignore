@@ -216,3 +216,9 @@ pip-log.txt
 
 # node.js
 node_modules
+
+
+
+lib/*
+!lib/cmmode/*
+!lib/cmtheme/*

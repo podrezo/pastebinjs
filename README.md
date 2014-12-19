@@ -2,6 +2,28 @@
 
 Created by [Petro Podrezo](http://podrezo.com/). View project on [GitHub](https://github.com/podrezo/pastebinjs)
 
+
+## Installation
+
+```
+git clone https://github.com/podrezo/pastebinjs.git
+cd copay
+```
+
+Install bower and grunt if you haven't already:
+```
+npm install -g bower
+npm install -g grunt-cli
+```
+
+Build Copay:
+```
+bower install
+npm install
+grunt
+```
+
+
 ## About the project
 PasteBin.JS is a pastebin implementation in node.js. A pastebin is a type of website that allows people to share snippets of code or text quickly and easily over the web. The key features of pastebin.js are:
 
