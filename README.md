@@ -6,8 +6,7 @@ Created by [Petro Podrezo](http://podrezo.com/). View project on [GitHub](https:
 ## Installation
 
 ```
-git clone https://github.com/podrezo/pastebinjs.git
-cd copay
+git clone https://github.com/podrezo/pastebinjs.git && cd pastebinjs
 ```
 
 Install bower and grunt if you haven't already:
@@ -16,7 +15,7 @@ npm install -g bower
 npm install -g grunt-cli
 ```
 
-Build Copay:
+Build:
 ```
 bower install
 npm install
