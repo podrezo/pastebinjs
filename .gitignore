@@ -218,7 +218,7 @@ pip-log.txt
 node_modules
 
 
-
+!lib/
 lib/*
-!lib/cmmode/*
-!lib/cmtheme/*
+!lib/cmmode
+!lib/cmtheme
