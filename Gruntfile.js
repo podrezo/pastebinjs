@@ -48,8 +48,7 @@ module.exports = function(grunt) {
       },
       vendors: {
         src: [
-          'lib/jquery/dist/jquery.min.js',
-          'lib/boostrap/bootstrap.min.js',
+          'lib/bootstrap/dist/js/bootstrap.min.js',
           'lib/underscore/underscore-min.js',
           'lib/codemirror/lib/codemirror.js'
         ],
@@ -79,6 +78,7 @@ module.exports = function(grunt) {
       css: {
         src: [
           'lib/bootstrap/dist/css/bootstrap.min.css',
+
           'lib/cmtheme/neat.css',
           'static/src/css/**/*.css'
         ],
