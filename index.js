@@ -34,5 +34,10 @@ app.get('*', function(req, res) {
   res.sendFile(__dirname + '/static/' + 'index.html');
 });
 
-logger.info('pastebin.js started! listening on 0.0.0.0/' + config.listenport);
-app.listen(config.listenport);
+if(config.listeninterface) {
+	logger.info('pastebin.js started! listening on ' + config.listeninterface + '/' + config.listenport);
+	app.listen(config.listenport, config.listeninterface);
+} else {
+	logger.info('pastebin.js started! listening on 0.0.0.0/' + config.listenport);
+	app.listen(config.listenport);
+}
