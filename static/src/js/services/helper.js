@@ -38,7 +38,7 @@ angular.module('pastebinjsApp.services').factory('helperFactory', ['$q', 'angula
 
       var loadScript = function() {
         // load the script
-        angularLoad.loadScript('/static/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
+        angularLoad.loadScript('/cmmode/' + languageMode + '/' + languageMode + '.js').then(function() {
           // Script loaded succesfully.
           deferred.resolve();
         }).catch(function() {

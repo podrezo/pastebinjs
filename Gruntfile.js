@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-css');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.initConfig({
     jshint: {
@@ -33,6 +34,15 @@ module.exports = function(grunt) {
       css: [
         'static/css/*.css'
       ]
+    },
+
+    copy: {
+      main: {
+        files: [
+          // includes files within path
+          {expand: true, src: ['**'], dest: 'static/cmmode/.', filter: 'isFile', cwd: 'lib/cmmode/'}
+        ]
+      }
     },
 
     concat: {
@@ -150,10 +160,11 @@ module.exports = function(grunt) {
     'clean:css',
     'concat',
     'cssmin',
-    'express:dev'
+    'express:dev',
+    'copy'
   ]);
 
-  grunt.registerTask('dev', ['clean', 'concat', 'express:prod']);
-  grunt.registerTask('prod', ['clean', 'concat', 'express:prod']);
+  grunt.registerTask('dev', ['clean', 'concat', 'express:prod', 'copy']);
+  grunt.registerTask('prod', ['clean', 'concat', 'express:prod', 'copy']);
   grunt.registerTask('doc', ['clean', 'apidoc']);
 };
