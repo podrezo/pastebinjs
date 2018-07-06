@@ -1,3 +1,5 @@
+<font color="red">This project is no longer supported. Some dependencies have security vulernabilities - use at your own risk.</font>
+
 # pastebin.js
 
 Created by [Petro Podrezo](http://podrezo.com/). View project on [GitHub](https://github.com/podrezo/pastebinjs)
@@ -11,8 +13,7 @@ git clone https://github.com/podrezo/pastebinjs.git && cd pastebinjs
 
 Install bower and grunt if you haven't already:
 ```
-npm install -g bower
-npm install -g grunt-cli
+npm install -g bower grunt-cli
 ```
 
 Build:
